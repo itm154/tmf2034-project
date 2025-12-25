@@ -4,7 +4,7 @@ $hostname = "localhost";
 $username = "root";
 $password = "";
 $database_name = "FitLifeDB";
-$port = 3307;
+$port = 3306;
 
 // Create connection
 $conn = new mysqli($hostname, $username, $password, $database_name, $port);
