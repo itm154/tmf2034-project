@@ -62,25 +62,25 @@ INSERT INTO Program (program_name, program_duration_weeks, program_fee, category
 
 -- Trainer_Program_History
 INSERT INTO Trainer_Program_History (trainer_person_id, program_id, start_date, end_date) VALUES
-(5, 2, '2023-01-01', NULL),        -- David teaches Advanced Weightlifting
-(7, 4, '2023-02-01', '2023-08-01'),-- Michael teaches HIIT
-(6, 3, '2023-03-01', NULL),        -- Patricia teaches Yoga
-(5, 1, '2023-09-01', NULL),        -- David also teaches Beginner Strength
-(13, 5, '2023-05-01', NULL),       -- Joseph teaches CrossFit
-(10, 6, '2023-06-01', NULL),       -- Jennifer teaches Pilates
-(7, 4, '2023-10-01', NULL);       -- Michael teaches HIIT again
+(5, 2, '2023-01-01', NULL),        -- History ID 1
+(7, 4, '2023-02-01', '2023-08-01'),-- History ID 2
+(6, 3, '2023-03-01', NULL),        -- History ID 3
+(5, 1, '2023-09-01', NULL),        -- History ID 4
+(13, 5, '2023-05-01', NULL),       -- History ID 5
+(10, 6, '2023-06-01', NULL),       -- History ID 6
+(7, 4, '2023-10-01', NULL);       -- History ID 7
 
 -- Enrolment (6 enrolments)
 INSERT INTO Enrolment (enrolment_date, program_id, member_person_id) VALUES
-('2023-09-05', 1, 1), -- John -> Beginner Strength
-('2023-03-10', 3, 2), -- Jane -> Yoga Flow
-('2023-05-15', 5, 8), -- Linda -> CrossFit Intro
-('2023-06-20', 6, 9), -- Robert -> Mat Pilates
-('2023-10-05', 4, 11),-- Charles -> HIIT Blast
-('2023-01-10', 2, 1); -- John -> Advanced Weightlifting
+('2023-09-05', 1, 1), -- John
+('2023-03-10', 3, 2), -- Jane
+('2023-05-15', 5, 8), -- Linda
+('2023-06-20', 6, 9), -- Robert
+('2023-10-05', 4, 11),-- Charles
+('2023-01-10', 2, 1); -- John
 
--- Invoice
-INSERT INTO Invoice (invoice_date, invoice_amount, invoice_payment_type, enrolment_id) VALUES
+-- Invoice (Updated to match schema column name: invoice_payment_method)
+INSERT INTO Invoice (invoice_date, invoice_amount, invoice_payment_method, enrolment_id) VALUES
 ('2023-09-05', 200.00, 'Card', 1),
 ('2023-03-10', 150.00, 'DuitNow', 2),
 ('2023-05-15', 300.00, 'Cash', 3),
@@ -88,43 +88,30 @@ INSERT INTO Invoice (invoice_date, invoice_amount, invoice_payment_type, enrolme
 ('2023-10-05', 100.00, 'DuitNow', 5),
 ('2023-01-10', 350.00, 'Card', 6);
 
--- Class
-INSERT INTO Class (class_datetime, history_id) VALUES
--- John's Beginner Strength (History ID 4)
-('2023-09-12 18:00:00', 4),
-('2023-09-19 18:00:00', 4),
--- Jane's Yoga (History ID 3)
-('2023-03-15 19:30:00', 3),
-('2023-03-22 19:30:00', 3),
--- Linda's CrossFit (History ID 5)
-('2023-05-20 09:00:00', 5),
-('2023-05-27 09:00:00', 5),
--- Robert's Pilates (History ID 6)
-('2023-06-25 17:00:00', 6),
-('2023-07-02 17:00:00', 6),
--- Charles' HIIT (History ID 7)
-('2023-10-10 18:30:00', 7),
-('2023-10-17 18:30:00', 7),
--- John's Advanced Weightlifting (History ID 1)
-('2023-01-15 20:00:00', 1),
-('2023-01-22 20:00:00', 1);
+-- Class (Updated with class_status)
+INSERT INTO Class (class_datetime, history_id, class_status) VALUES
+('2023-09-12 18:00:00', 4, 'Completed'),
+('2023-09-19 18:00:00', 4, 'Completed'),
+('2023-03-15 19:30:00', 3, 'Completed'),
+('2023-03-22 19:30:00', 3, 'Completed'),
+('2023-05-20 09:00:00', 5, 'Completed'),
+('2023-05-27 09:00:00', 5, 'Completed'),
+('2023-06-25 17:00:00', 6, 'Completed'),
+('2023-07-02 17:00:00', 6, 'Completed'),
+('2023-10-10 18:30:00', 7, 'Completed'),
+('2023-10-17 18:30:00', 7, 'Cancelled'), -- One cancelled class for performance reports
+('2023-01-15 20:00:00', 1, 'Completed'),
+('2023-01-22 20:00:00', 1, 'Active');    -- One active class for scheduling
 
 -- Attendance
 INSERT INTO Attendance (person_id, class_id, attendance_status) VALUES
--- John's attendance
 (1, 1, 'Attended'),
 (1, 2, 'Absent'),
 (1, 11, 'Attended'),
-(1, 12, 'Attended'),
--- Jane's attendance
 (2, 3, 'Attended'),
 (2, 4, 'Attended'),
--- Linda's attendance
 (8, 5, 'Attended'),
 (8, 6, 'Attended'),
--- Robert's attendance
 (9, 7, 'Absent'),
 (9, 8, 'Attended'),
--- Charles's attendance
-(11, 9, 'Attended'),
-(11, 10, 'Attended');
+(11, 9, 'Attended');
