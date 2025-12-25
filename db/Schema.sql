@@ -81,7 +81,7 @@ CREATE TABLE Invoice (
 	invoice_id INTEGER AUTO_INCREMENT,
 	invoice_date DATE NOT NULL,
 	invoice_amount DECIMAL(10,2) NOT NULL,
-	invoice_payment_type VARCHAR(20) NOT NULL,
+	invoice_payment_method VARCHAR(20) NOT NULL,
 	enrolment_id INTEGER NOT NULL UNIQUE,
 	PRIMARY KEY(invoice_id),
 	CONSTRAINT chk_payment_type
@@ -92,8 +92,11 @@ CREATE TABLE Invoice (
 CREATE TABLE Class (
 	class_id INTEGER AUTO_INCREMENT,
 	class_datetime DATETIME NOT NULL,
+	class_status VARCHAR(20) NOT NULL DEFAULT 'Active',
 	history_id INTEGER NOT NULL,
 	PRIMARY KEY(class_id)
+	CONSTRAINT chk_class_status 
+		CHECK (class_status IN ('Active', 'Completed', 'Cancelled'))
 );
 
 CREATE TABLE Attendance (
