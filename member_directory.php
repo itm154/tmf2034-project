@@ -1,7 +1,6 @@
 <?php
-include 'navbar.php';
 include 'db_connect.php';
+include 'navbar.php';
 ?>
-
-<h1>Dashboard</h1>
+<h1>Member directory</h1>
 <?php $conn->close(); ?>
