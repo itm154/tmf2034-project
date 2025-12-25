@@ -3,5 +3,5 @@ include 'navbar.php';
 include 'db_connect.php';
 ?>
 
-<h1>Dashboard</h1>
+<h1>Fitlife Dashboard</h1>
 <?php $conn->close(); ?>
