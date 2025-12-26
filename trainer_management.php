@@ -99,36 +99,58 @@ $performance = $conn->query("
 <!-- ================= ADD / UPDATE FORM ================= -->
 <div class="card">
 <h2>Add / Update Trainer</h2>
+
 <form method="POST">
-<input type="hidden" name="id" value="<?php echo $edit_id; ?>">
+    <input type="hidden" name="id" value="<?php echo $edit_id; ?>">
 
-Name:
-<input type="text" name="name" required value="<?php echo $edit['person_name'] ?? ''; ?>">
+    <ul style="list-style: none; padding-left: 0;">
+        <li>
+            <label>Name:</label><br>
+            <input type="text" name="name" required
+                   value="<?php echo $edit['person_name'] ?? ''; ?>">
+        </li><br>
 
-Contact:
-<input type="text" name="contact" required value="<?php echo $edit['person_contact'] ?? ''; ?>">
+        <li>
+            <label>Contact:</label><br>
+            <input type="text" name="contact" required
+                   value="<?php echo $edit['person_contact'] ?? ''; ?>">
+        </li><br>
 
-DOB:
-<input type="date" name="dob" required value="<?php echo $edit['person_dob'] ?? ''; ?>">
+        <li>
+            <label>Date of Birth:</label><br>
+            <input type="date" name="dob" required
+                   value="<?php echo $edit['person_dob'] ?? ''; ?>">
+        </li><br>
 
-Gender:
-<select name="gender" required>
-<option value="Male" <?php if(($edit['person_gender'] ?? '')=='Male') echo 'selected'; ?>>Male</option>
-<option value="Female" <?php if(($edit['person_gender'] ?? '')=='Female') echo 'selected'; ?>>Female</option>
-</select>
+        <li>
+            <label>Gender:</label><br>
+            <select name="gender" required>
+                <option value="Male" <?php if(($edit['person_gender'] ?? '')=='Male') echo 'selected'; ?>>Male</option>
+                <option value="Female" <?php if(($edit['person_gender'] ?? '')=='Female') echo 'selected'; ?>>Female</option>
+            </select>
+        </li><br>
 
-Specialization:
-<input type="text" name="specialization" required value="<?php echo $edit['trainer_specialization'] ?? ''; ?>">
+        <li>
+            <label>Specialization:</label><br>
+            <input type="text" name="specialization" required
+                   value="<?php echo $edit['trainer_specialization'] ?? ''; ?>">
+        </li><br>
 
-Cert Level:
-<input type="text" name="cert" required value="<?php echo $edit['trainer_cert_lvl'] ?? ''; ?>">
+        <li>
+            <label>Certification Level:</label><br>
+            <input type="text" name="cert" required
+                   value="<?php echo $edit['trainer_cert_lvl'] ?? ''; ?>">
+        </li><br>
 
-<?php if ($edit_id) { ?>
-    <input type="submit" name="update_trainer" value="Update Trainer">
-    <a href="trainer_management.php">Cancel</a>
-<?php } else { ?>
-    <input type="submit" name="add_trainer" value="Add Trainer">
-<?php } ?>
+        <li>
+            <?php if ($edit_id) { ?>
+                <input type="submit" name="update_trainer" value="Update Trainer">
+                <a href="trainer_management.php">Cancel</a>
+            <?php } else { ?>
+                <input type="submit" name="add_trainer" value="Add Trainer">
+            <?php } ?>
+        </li>
+    </ul>
 </form>
 </div>
 
