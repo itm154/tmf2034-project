@@ -9,29 +9,41 @@ include 'navbar.php';
 <h1>Member Directory</h1>
 
 <form action="add_member.php" method="post">
-	<label for="name">Name:</label>
-	<input type="text" id="name" name="name" required><br>
+	<p>
+		<label for="name">Name:</label>
+		<input type="text" id="name" name="name" required>
+	</p>
 
-	<label for="contact">Contact:</label>
-	<input type="text" id="contact" name="contact" required><br>
+	<p>
+		<label for="contact">Contact:</label>
+		<input type="text" id="contact" name="contact" required>
+	</p>
 
-	<label for="dob">Date of Birth:</label>
-	<input type="date" id="dob" name="dob" required><br>
+	<p>
+		<label for="dob">Date of Birth:</label>
+		<input type="date" id="dob" name="dob" required>
+	</p>
 
-	<label for="gender">Gender:</label>
-	<select id="gender" name="gender" required>
-		<option value="Male">Male</option>
-		<option value="Female">Female</option>
-	</select><br>
+	<p>
+		<label for="gender">Gender:</label>
+		<select id="gender" name="gender" required>
+			<option value="Male">Male</option>
+			<option value="Female">Female</option>
+		</select>
+	</p>
 
-	<label for="membership_type">Membership:</label>
-	<select id="membership_type" name="membership_type" required>
-		<option value=1>Basic</option>
-		<option value=2>Premium</option>
-		<option value=3>Gold</option>
-	</select><br>
+	<p>
+		<label for="membership_type">Membership:</label>
+		<select id="membership_type" name="membership_type" required>
+			<option value=1>Basic</option>
+			<option value=2>Premium</option>
+			<option value=3>Gold</option>
+		</select>
+	</p>
 
-	<input type="submit" name="submit" value="Register">
+	<p>
+		<input type="submit" name="submit" value="Register">
+	</p>
 </form>
 
 <table>
