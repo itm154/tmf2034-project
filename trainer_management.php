@@ -1,13 +1,62 @@
 <?php
 include 'db_connect.php';
 include 'navbar.php';
+?>
+
+<style>
+
+    h1, h2 {
+        margin-top: 20px;
+        margin-bottom: 0px;
+    }
+
+    .card {
+        width: 70%;
+        background: #f9f9f9;
+        padding: 20px;
+        margin: 10px auto;
+        border-radius: 8px;
+    }
+
+    form input[type="text"],
+    form input[type="email"] {
+        padding: 6px;
+        margin-right: 8px;
+    }
+
+    form input[type="submit"] {
+        padding: 6px 12px;
+        cursor: pointer;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ccc;
+    }
+
+    th {
+        background-color: #eee;
+    }
+
+    a {
+        text-decoration: underline;
+    }
+</style>
+<?php
 
 // ---- ADD TRAINER ----
 if(isset($_POST['add_trainer'])){
     $name = $_POST['name'];
     $email = $_POST['email'];
-    $sql = "INSERT INTO trainers (name, email) VALUES ('$name', '$email')";
-    $conn->query($sql);
+    $conn->query("INSERT INTO trainers (name, email) VALUES ('$name', '$email')");
 }
 
 // ---- DELETE TRAINER ----
@@ -17,15 +66,12 @@ if(isset($_GET['delete'])){
 }
 
 // ---- UPDATE TRAINERS ----
-$edit_id = "";
-$edit_name = "";
-$edit_email = "";
+$edit_id = $edit_name = $edit_email = "";
 
 if (isset($_GET['edit'])) {
     $edit_id = $_GET['edit'];
     $edit_result = $conn->query("SELECT * FROM trainers WHERE id=$edit_id");
     $edit_row = $edit_result->fetch_assoc();
-
     $edit_name = $edit_row['name'];
     $edit_email = $edit_row['email'];
 }
@@ -35,7 +81,6 @@ if (isset($_POST['update_trainer'])) {
     $id = $_POST['id'];
     $name = $_POST['name'];
     $email = $_POST['email'];
-
     $conn->query("UPDATE trainers SET name='$name', email='$email' WHERE id=$id");
 }
 
@@ -57,61 +102,75 @@ $performance = $conn->query("
 <h1>Trainer management</h1>
 
 <!-- Add Trainer Form -->
-<form method="POST">
-    <input type="hidden" name="id" value="<?php echo $edit_id; ?>">
+<div class="card">
+    <h2>Add / Update Trainer</h2>
 
-    Name: <input type="text" name="name" required
-           value="<?php echo $edit_name; ?>">
+    <form method="POST">
+        <input type="hidden" name="id" value="<?php echo $edit_id; ?>">
 
-    Email: <input type="email" name="email" required
-           value="<?php echo $edit_email; ?>">
+        Name:
+        <input type="text" name="name" required value="<?php echo $edit_name; ?>">
 
-    <?php if ($edit_id) { ?>
-        <input type="submit" name="update_trainer" value="Update Trainer">
-        <a href="trainer_management.php">Cancel</a>
-    <?php } else { ?>
-        <input type="submit" name="add_trainer" value="Add Trainer">
-    <?php } ?>
-</form>
+        Email:
+        <input type="email" name="email" required value="<?php echo $edit_email; ?>">
 
-<!-- Trainer List Table -->
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Actions</th>
-    </tr>
-    <?php while($row = $result->fetch_assoc()){ ?>
-    <tr>
-        <td><?php echo $row['id']; ?></td>
-        <td><?php echo $row['name']; ?></td>
-        <td><?php echo $row['email']; ?></td>
-        <td>
-            <a href="trainer_management.php?edit=<?php echo $row['id']; ?>">Edit</a> |
-            <a href="trainer_management.php?delete=<?php echo $row['id']; ?>">Delete</a>
+        <?php if ($edit_id) { ?>
+            <input type="submit" name="update_trainer" value="Update Trainer">
+            <a href="trainer_management.php">Cancel</a>
+        <?php } else { ?>
+            <input type="submit" name="add_trainer" value="Add Trainer">
+        <?php } ?>
+    </form>
+</div>
 
-        </td>
-    </tr>
-    <?php } ?>
-</table>
 
-<h2>Trainer Performance Report</h2>
+<!-- Trainer List -->
+<div class="card">
+    <h2>Trainer List</h2>
 
-<table border="1" cellpadding="8">
-    <tr>
-        <th>Trainer Name</th>
-        <th>Total Classes Taught</th>
-        <th>Total Missed / Cancelled</th>
-    </tr>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
 
-    <?php while ($p = $performance->fetch_assoc()) { ?>
-    <tr>
-        <td><?php echo $p['trainer_name']; ?></td>
-        <td><?php echo $p['total_classes']; ?></td>
-        <td><?php echo $p['cancelled_classes'] ?? 0; ?></td>
-    </tr>
-    <?php } ?>
-</table>
+        <?php while($row = $result->fetch_assoc()){ ?>
+        <tr>
+            <td><?php echo $row['id']; ?></td>
+            <td><?php echo $row['name']; ?></td>
+            <td><?php echo $row['email']; ?></td>
+            <td>
+                <a href="trainer_management.php?edit=<?php echo $row['id']; ?>">Edit</a> |
+                <a href="trainer_management.php?delete=<?php echo $row['id']; ?>"
+                   onclick="return confirm('Delete this trainer?')">Delete</a>
+            </td>
+        </tr>
+        <?php } ?>
+    </table>
+</div>
+
+
+<!-- Trainer Performance Report -->
+<div class="card">
+    <h2>Trainer Performance Report</h2>
+
+    <table>
+        <tr>
+            <th>Trainer Name</th>
+            <th>Total Classes Taught</th>
+            <th>Total Missed / Cancelled</th>
+        </tr>
+
+        <?php while ($p = $performance->fetch_assoc()) { ?>
+        <tr>
+            <td><?php echo $p['trainer_name']; ?></td>
+            <td><?php echo $p['total_classes']; ?></td>
+            <td><?php echo $p['cancelled_classes'] ?? 0; ?></td>
+        </tr>
+        <?php } ?>
+    </table>
+</div>
 
 <?php $conn->close(); ?>
