@@ -1,9 +1,4 @@
 <?php
-echo "<h1>TEST TOP</h1>";
-exit;
-?>
-
-<?php
 include 'db_connect.php';
 include 'navbar.php';
 
