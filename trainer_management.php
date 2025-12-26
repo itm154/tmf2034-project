@@ -1,7 +1,9 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+echo "<h1>TEST TOP</h1>";
+exit;
+?>
 
+<?php
 include 'db_connect.php';
 include 'navbar.php';
 
