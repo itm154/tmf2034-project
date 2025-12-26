@@ -5,7 +5,25 @@ include 'navbar.php';
 
 <html>
 
+
 <h1>Member Directory</h1>
+
+<form action="add_member.php" method="post">
+	Name: <input type="text" name="name" required><br>
+	Contact: <input type="text" name="contact" required><br>
+	Date of Birth: <input type="date" name="dob" required><br>
+	Gender: <select name="gender" required>
+		<option value="Male">Male</option>
+		<option value="Female">Female</option>
+	</select><br>
+	Membership: <select name="membership_type" required>
+		<option value=1>Basic</option>
+		<option value=2>Premium</option>
+		<option value=3>Gold</option>
+	</select><br>
+	<input type="submit" name="submit" value="Register">
+</form>
+
 <table>
 	<tr>
 		<th>ID</th>
