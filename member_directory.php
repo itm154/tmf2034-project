@@ -9,18 +9,28 @@ include 'navbar.php';
 <h1>Member Directory</h1>
 
 <form action="add_member.php" method="post">
-	Name: <input type="text" name="name" required><br>
-	Contact: <input type="text" name="contact" required><br>
-	Date of Birth: <input type="date" name="dob" required><br>
-	Gender: <select name="gender" required>
+	<label for="name">Name:</label>
+	<input type="text" id="name" name="name" required><br>
+
+	<label for="contact">Contact:</label>
+	<input type="text" id="contact" name="contact" required><br>
+
+	<label for="dob">Date of Birth:</label>
+	<input type="date" id="dob" name="dob" required><br>
+
+	<label for="gender">Gender:</label>
+	<select id="gender" name="gender" required>
 		<option value="Male">Male</option>
 		<option value="Female">Female</option>
 	</select><br>
-	Membership: <select name="membership_type" required>
+
+	<label for="membership_type">Membership:</label>
+	<select id="membership_type" name="membership_type" required>
 		<option value=1>Basic</option>
 		<option value=2>Premium</option>
 		<option value=3>Gold</option>
 	</select><br>
+
 	<input type="submit" name="submit" value="Register">
 </form>
 
@@ -62,9 +72,7 @@ include 'navbar.php';
 				<a href="delete_member.php?member_id=<?php echo $row['person_id'] ?>" onclick="return confirm('Are you sure you want to delete this member?');">Delete</a>
 			</td>
 		</tr>
-	<?php
-	}
-	?>
+	<?php } ?>
 </table>
 
 </html>
