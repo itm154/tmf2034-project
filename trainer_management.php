@@ -41,6 +41,17 @@ if (isset($_POST['update_trainer'])) {
 
 // ---- FETCH ALL TRAINERS ----
 $result = $conn->query("SELECT * FROM trainers");
+
+// ---- TRAINER PERFORMANCE REPORT ----
+$performance = $conn->query("
+    SELECT 
+        t.name AS trainer_name,
+        COUNT(c.class_id) AS total_classes,
+        SUM(CASE WHEN c.status = 'cancelled' THEN 1 ELSE 0 END) AS cancelled_classes
+    FROM trainers t
+    LEFT JOIN classes c ON t.id = c.trainer_id
+    GROUP BY t.id
+");
 ?>
 
 <h1>Trainer management</h1>
@@ -81,6 +92,24 @@ $result = $conn->query("SELECT * FROM trainers");
             <a href="trainer_management.php?delete=<?php echo $row['id']; ?>">Delete</a>
 
         </td>
+    </tr>
+    <?php } ?>
+</table>
+
+<h2>Trainer Performance Report</h2>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Trainer Name</th>
+        <th>Total Classes Taught</th>
+        <th>Total Missed / Cancelled</th>
+    </tr>
+
+    <?php while ($p = $performance->fetch_assoc()) { ?>
+    <tr>
+        <td><?php echo $p['trainer_name']; ?></td>
+        <td><?php echo $p['total_classes']; ?></td>
+        <td><?php echo $p['cancelled_classes'] ?? 0; ?></td>
     </tr>
     <?php } ?>
 </table>
