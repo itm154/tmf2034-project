@@ -13,7 +13,7 @@ include 'navbar.php';
 		<th>Membership Tier</th>
 		<th>Status</th>
 		<th>Joined Programs</th>
-		<th>Actions</th>
+		<th colspan="2">Actions</th>
 	</tr>
 	<?php
 
@@ -39,6 +39,9 @@ include 'navbar.php';
 			</td>
 			<td>
 				<a href="view_member.php?member_id=<?php echo $row['person_id'] ?>">View</a>
+			</td>
+			<td>
+				<a href="delete_member.php?member_id=<?php echo $row['person_id'] ?>" onclick="return confirm('Are you sure you want to delete this member?');">Delete</a>
 			</td>
 		</tr>
 	<?php
