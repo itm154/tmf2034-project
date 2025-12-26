@@ -3,55 +3,7 @@ include 'db_connect.php';
 include 'navbar.php';
 ?>
 
-<style>
-
-    h1, h2 {
-        margin-top: 20px;
-        margin-bottom: 0px;
-    }
-
-    .card {
-        width: 70%;
-        background: #f9f9f9;
-        padding: 20px;
-        margin: 10px auto;
-        border-radius: 8px;
-    }
-
-    form input[type="text"],
-    form input[type="email"] {
-        padding: 6px;
-        margin-right: 8px;
-    }
-
-    form input[type="submit"] {
-        padding: 6px 12px;
-        cursor: pointer;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 5px;
-        margin-bottom: 10px;
-    }
-
-    th, td {
-        padding: 10px;
-        text-align: center;
-        border: 1px solid #ccc;
-    }
-
-    th {
-        background-color: #eee;
-    }
-
-    a {
-        text-decoration: underline;
-    }
-</style>
 <?php
-
 // ---- ADD TRAINER ----
 if(isset($_POST['add_trainer'])){
     $name = $_POST['name'];
