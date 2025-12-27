@@ -12,12 +12,14 @@ include 'navbar.php';
 	<tr>
 		<th>Class ID</th>
 		<th>Date and Time</th>
+        <th>Trainer</th>
 		<th>Class Status</th>
+        
 	</tr>
 
     <?php
 
-	$query = file_get_contents('queries/class.sql');
+	$query = file_get_contents('queries/class.sql/trainer_program_history.sql');
 	$result = $conn->query($query);
 	while ($row = mysqli_fetch_assoc($result)) {
 	?>
@@ -29,10 +31,15 @@ include 'navbar.php';
 				<?php echo $row['class_datetime'] ?>
 			</td>
 			<td>
+				<?php echo $row['person_id'] ?>
+			</td>
+            <td>
 				<?php echo $row['class_status'] ?>
 			</td>
 		</tr>
 	<?php } ?>
+
+    
 </table>
 
 </html>
