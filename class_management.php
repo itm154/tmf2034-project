@@ -10,16 +10,17 @@ include 'navbar.php';
 
 <table>
 	<tr>
-		<th>Class ID</th>
-		<th>Date and Time</th>
-		<th>Class Status</th>
+		<th>ID</th>
 		<th>Trainer</th>
+		<th>Class Status</th>
+		<th>Program</th>
+		<th>Date and Time</th>
 
 	</tr>
 
 	<?php
 
-	$query = file_get_contents('queries/class_info.sql');
+	$query = file_get_contents('queries/class/class_info.sql');
 	$result = $conn->query($query);
 	while ($row = mysqli_fetch_assoc($result)) {
 	?>
@@ -28,13 +29,16 @@ include 'navbar.php';
 				<?php echo $row['class_id'] ?>
 			</td>
 			<td>
-				<?php echo $row['class_datetime'] ?>
+				<?php echo $row['person_name'] ?>
+			</td>
+			<td>
+				<?php echo $row['program_name'] ?>
 			</td>
 			<td>
 				<?php echo $row['class_status'] ?>
 			</td>
 			<td>
-				<?php echo $row['trainer_name'] ?>
+				<?php echo $row['class_datetime'] ?>
 			</td>
 			<td>
 				<a href="delete_class.php?class_id=<?php echo $row['class_id'] ?>" onclick="return confirm('Are you sure you want to delete this class?');">Delete</a>

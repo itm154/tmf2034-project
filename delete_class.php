@@ -3,7 +3,7 @@ include 'db_connect.php';
 
 
 if (isset($_GET['class_id'])) {
-	$member_id = $_GET['class_id'];
+	$class_id = $_GET['class_id'];
 
 	$sql = "DELETE FROM Class WHERE class_id = ?";
 
