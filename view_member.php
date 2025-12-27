@@ -9,7 +9,7 @@ include("db_connect.php");
 	$member_id = $_GET['member_id'];
 
 	// Fetch member's info
-	$member_query = "SELECT person_name, person_contact, person_dob, person_gender FROM Person WHERE person_id = ?";
+	$member_query = "SELECT p.person_name, p.person_contact, p.person_dob, p.person_gender, m.membership_type_id, m.membership_status FROM Person p JOIN Member m ON p.person_id = m.person_id WHERE m.person_id = ?";
 	$stmt = $conn->prepare($member_query);
 	$stmt->bind_param("i", $member_id);
 	$stmt->execute();
@@ -40,8 +40,26 @@ include("db_connect.php");
 			<p>
 				<label for="gender">Gender:</label>
 				<select id="gender" name="gender" required>
-					<option value="Male" <?php if ($member_info['person_gender'] == 'Male') echo 'selected'; ?>>Male</option>
-					<option value="Female" <?php if ($member_info['person_gender'] == 'Female') echo 'selected'; ?>>Female</option>
+					<option value="Male" <?php if ($member_info['person_gender'] == 'Male') echo 'selected="selected"'; ?>>Male</option>
+					<option value="Female" <?php if ($member_info['person_gender'] == 'Female') echo 'selected="selected"'; ?>>Female</option>
+				</select>
+			</p>
+
+			<p>
+				<label for="membership_type">Membership type:</label>
+				<select id="membership_type" name="membership_type" required>
+					<option value=1 <?php if ($member_info['membership_type_id'] == 1) echo 'selected="selected"'; ?>>Basic</option>
+					<option value=2 <?php if ($member_info['membership_type_id'] == 2) echo 'selected="selected"'; ?>>Premium</option>
+					<option value=3 <?php if ($member_info['membership_type_id'] == 3) echo 'selected="selected"'; ?>>Gold</option>
+				</select>
+			</p>
+
+			<p>
+				<label for="membership_status">Membership status:</label>
+				<select id="membership_status" name="membership_status" required>
+					<option value="Active" <?php if ($member_info['membership_status'] == 'Active') echo 'selected="selected"'; ?>>Active</option>
+					<option value="Inactive" <?php if ($member_info['membership_status'] == 'Inactive') echo 'selected="selected"'; ?>>Inactive</option>
+					<option value="Suspended" <?php if ($member_info['membership_status'] == 'Suspended') echo 'selected="selected"'; ?>>Suspended</option>
 				</select>
 			</p>
 
