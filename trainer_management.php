@@ -103,54 +103,52 @@ $performance = $conn->query("
 	<form method="POST">
 		<input type="hidden" name="id" value="<?php echo $edit_id; ?>">
 
-		<ul style="list-style: none; padding-left: 0;">
-			<li>
-				<label>Name:</label><br>
-				<input type="text" name="name" required
-					value="<?php echo $edit['person_name'] ?? ''; ?>">
-			</li><br>
+		<p>
+			<label for="name">Name:</label>
+			<input type="text" id="name" name="name" required
+				value="<?php echo $edit['person_name'] ?? ''; ?>">
+		</p>
 
-			<li>
-				<label>Contact:</label><br>
-				<input type="text" name="contact" required
-					value="<?php echo $edit['person_contact'] ?? ''; ?>">
-			</li><br>
+		<p>
+			<label for="contact">Contact:</label>
+			<input type="text" id="contact" name="contact" required
+				value="<?php echo $edit['person_contact'] ?? ''; ?>">
+		</p>
 
-			<li>
-				<label>Date of Birth:</label><br>
-				<input type="date" name="dob" required
-					value="<?php echo $edit['person_dob'] ?? ''; ?>">
-			</li><br>
+		<p>
+			<label for="dob">Date of Birth:</label>
+			<input type="date" id="dob" name="dob" required
+				value="<?php echo $edit['person_dob'] ?? ''; ?>">
+		</p>
 
-			<li>
-				<label>Gender:</label><br>
-				<select name="gender" required>
-					<option value="Male" <?php if (($edit['person_gender'] ?? '') == 'Male') echo 'selected'; ?>>Male</option>
-					<option value="Female" <?php if (($edit['person_gender'] ?? '') == 'Female') echo 'selected'; ?>>Female</option>
-				</select>
-			</li><br>
+		<p>
+			<label for="gender">Gender:</label>
+			<select id="gender" name="gender" required>
+				<option value="Male" <?php if (($edit['person_gender'] ?? '') == 'Male') echo 'selected'; ?>>Male</option>
+				<option value="Female" <?php if (($edit['person_gender'] ?? '') == 'Female') echo 'selected'; ?>>Female</option>
+			</select>
+		</p>
 
-			<li>
-				<label>Specialization:</label><br>
-				<input type="text" name="specialization" required
-					value="<?php echo $edit['trainer_specialization'] ?? ''; ?>">
-			</li><br>
+		<p>
+			<label for="specialization">Specialization:</label>
+			<input type="text" id="specialization" name="specialization" required
+				value="<?php echo $edit['trainer_specialization'] ?? ''; ?>">
+		</p>
 
-			<li>
-				<label>Certification Level:</label><br>
-				<input type="text" name="cert" required
-					value="<?php echo $edit['trainer_cert_lvl'] ?? ''; ?>">
-			</li><br>
+		<p>
+			<label for="cert">Certification Level:</label>
+			<input type="text" id="cert" name="cert" required
+				value="<?php echo $edit['trainer_cert_lvl'] ?? ''; ?>">
+		</p>
 
-			<li>
-				<?php if ($edit_id) { ?>
-					<input type="submit" name="update_trainer" value="Update Trainer">
-					<a href="trainer_management.php">Cancel</a>
-				<?php } else { ?>
-					<input type="submit" name="add_trainer" value="Add Trainer">
-				<?php } ?>
-			</li>
-		</ul>
+		<p>
+			<?php if ($edit_id) { ?>
+				<input type="submit" name="update_trainer" value="Update Trainer">
+				<a href="trainer_management.php">Cancel</a>
+			<?php } else { ?>
+				<input type="submit" name="add_trainer" value="Add Trainer">
+			<?php } ?>
+		</p>
 	</form>
 </div>
 
