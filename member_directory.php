@@ -57,7 +57,7 @@ include 'navbar.php';
 	</tr>
 	<?php
 
-	$query = file_get_contents('queries/member_info.sql');
+	$query = file_get_contents('queries/member/member_info.sql');
 	$result = $conn->query($query);
 	while ($row = mysqli_fetch_assoc($result)) {
 	?>
