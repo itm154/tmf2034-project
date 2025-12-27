@@ -79,7 +79,7 @@ include("db_connect.php");
 			<th>Enrolment Date</th>
 		</tr>
 		<?php
-		$program_query = file_get_contents('queries/member_programs.sql');
+		$program_query = file_get_contents('queries/member/member_programs.sql');
 		$stmt = $conn->prepare($program_query);
 		$stmt->bind_param("i", $member_id);
 		$stmt->execute();
@@ -103,7 +103,7 @@ include("db_connect.php");
 			<th>Status</th>
 		</tr>
 		<?php
-		$attendance_query = file_get_contents('queries/member_attendance.sql');
+		$attendance_query = file_get_contents('queries/member/member_attendance.sql');
 		$stmt = $conn->prepare($attendance_query);
 		$stmt->bind_param("i", $member_id);
 		$stmt->execute();
@@ -128,7 +128,7 @@ include("db_connect.php");
 			<th>Payment Method</th>
 		</tr>
 		<?php
-		$payment_query = file_get_contents('queries/member_payment.sql');
+		$payment_query = file_get_contents('queries/member/member_payment.sql');
 		$stmt = $conn->prepare($payment_query);
 		$stmt->bind_param("i", $member_id);
 		$stmt->execute();
