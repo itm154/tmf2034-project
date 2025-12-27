@@ -47,5 +47,5 @@ include 'navbar.php';
 
 </html>
 
-<?php $conn->close(); ?>
-
+<?php $conn->close(); 
+?>
