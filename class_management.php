@@ -6,15 +6,54 @@ include 'navbar.php';
 <html>
 <h1>Class management</h1>
 
-<h1>Class Schedule</h1>
+<h2>Add Class</h2>
+<form action="add_class.php" method="post">
+	<p>
+		<label for="trainer">Trainer:</label>
+		<select id="trainer" name="trainer_id" required>
+			<?php
+			$trainers_query = "SELECT T.person_id, P.person_name FROM Trainer T JOIN Person P ON T.person_id = P.person_id ORDER BY P.person_name";
+			$trainers_result = $conn->query($trainers_query);
+			while ($trainer = $trainers_result->fetch_assoc()):
+			?>
+				<option value="<?php echo $trainer['person_id']; ?>"><?php echo $trainer['person_name']; ?></option>
+			<?php endwhile; ?>
+		</select>
+	</p>
+
+	<p>
+		<label for="program">Program:</label>
+		<select id="program" name="program_id" required>
+			<?php
+			$programs_query = "SELECT program_id, program_name FROM Program ORDER BY program_name";
+			$programs_result = $conn->query($programs_query);
+			while ($program = $programs_result->fetch_assoc()):
+			?>
+				<option value="<?php echo $program['program_id']; ?>"><?php echo $program['program_name']; ?></option>
+			<?php endwhile; ?>
+		</select>
+	</p>
+
+	<p>
+		<label for="datetime">Date and Time:</label>
+		<input type="datetime-local" id="datetime" name="class_datetime" required>
+	</p>
+
+	<p>
+		<input type="submit" name="submit" value="Add Class">
+	</p>
+</form>
+
+<h2>Class Schedule</h2>
 
 <table>
 	<tr>
 		<th>ID</th>
 		<th>Trainer</th>
-		<th>Class Status</th>
 		<th>Program</th>
+		<th>Class Status</th>
 		<th>Date and Time</th>
+		<th>Actions</th>
 
 	</tr>
 
