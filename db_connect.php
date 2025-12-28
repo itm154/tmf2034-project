@@ -1,6 +1,6 @@
 <?php
 
-$hostname = "db";
+$hostname = "localhost";
 $username = "root";
 $password = "";
 $database_name = "FitLifeDB";
