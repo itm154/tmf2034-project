@@ -12,7 +12,7 @@ if (isset($_GET['class_id'])) {
 	exit();
 }
 
-// Fetch inital class information
+// Fetch initial class information
 $query = "SELECT C.class_id, C.history_id, C.class_datetime, C.class_status FROM Class C WHERE C.class_id = ?";
 $stmt = $conn->prepare($query);
 if ($stmt) {
@@ -34,7 +34,7 @@ if ($stmt) {
 
 <?php include 'navbar.php'; ?>
 
-<h1>Update Class</h1>
+<h1>Edit Class</h1>
 
 <form action="update_class.php" method="post">
 	<input type="hidden" name="class_id" value="<?php echo $class_info['class_id']; ?>">
@@ -43,13 +43,21 @@ if ($stmt) {
 		<label for="history">Trainer & Program:</label>
 		<select id="history" name="history_id" required>
 			<?php
-			$combo_query = "SELECT tph.history_id, p.person_name, pr.program_name FROM Trainer_Program_History tph JOIN Person p ON tph.trainer_person_id = p.person_id JOIN Program pr ON tph.program_id = pr.program_id WHERE tph.end_date IS NULL OR tph.end_date >= CURDATE() ORDER BY p.person_name, pr.program_name";
-			$combo_result = $conn->query($combo_query);
-			while ($combo = $combo_result->fetch_assoc()):
-				$selected = ($combo['history_id'] == $class_info['history_id']) ? 'selected' : '';
+			$combo_query_sql = file_get_contents('queries/class/trainer_program_history.sql');
+			if ($combo_query_sql === false) {
+				echo '<option value="">Error: Unable to load history data.</option>';
+			} else {
+				$combo_result = $conn->query($combo_query_sql);
+				if ($combo_result && $combo_result->num_rows > 0) {
+					while ($combo = $combo_result->fetch_assoc()) {
+						$selected = ($combo['history_id'] == $class_info['history_id']) ? 'selected' : '';
+						echo '<option value="' . $combo['history_id'] . '" ' . $selected . '>' . $combo['person_name'] . ' - ' . $combo['program_name'] . '</option>';
+					}
+				} else {
+					echo '<option value="">No history available</option>';
+				}
+			}
 			?>
-				<option value="<?php echo $combo['history_id']; ?>" <?php echo $selected; ?>><?php echo $combo['person_name'] . ' - ' . $combo['program_name']; ?></option>
-			<?php endwhile; ?>
 		</select>
 	</p>
 
@@ -61,9 +69,9 @@ if ($stmt) {
 	<p>
 		<label for="status">Class Status:</label>
 		<select id="status" name="class_status" required>
-			<option value="Active" <?php if ($class_info['class_status'] == 'Active') echo 'selected="selected"'; ?>>Active</option>
-			<option value="Completed" <?php if ($class_info['class_status'] == 'Completed') echo 'selected="selected"'; ?>>Completed</option>
-			<option value="Cancelled" <?php if ($class_info['class_status'] == 'Cancelled') echo 'selected="selected"'; ?>>Cancelled</option>
+			<option value="Active" <?php if ($class_info['class_status'] == 'Active') echo 'selected'; ?>>Active</option>
+			<option value="Completed" <?php if ($class_info['class_status'] == 'Completed') echo 'selected'; ?>>Completed</option>
+			<option value="Cancelled" <?php if ($class_info['class_status'] == 'Cancelled') echo 'selected'; ?>>Cancelled</option>
 		</select>
 	</p>
 
@@ -71,6 +79,5 @@ if ($stmt) {
 		<input type="submit" name="submit" value="Update Class">
 	</p>
 </form>
-
 
 <?php $conn->close(); ?>

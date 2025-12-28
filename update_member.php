@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 		$conn->begin_transaction();
 
-		$query_person = "UPDATE Person SET person_name = ?, person_contact = ?, person_dob = ?, person_gender = ? WHERE person_id = ?";
+		$query_person = file_get_contents('queries/person/update_person.sql');
 		$stmt_person = $conn->prepare($query_person);
 		$stmt_person->bind_param("ssssi", $name, $contact, $dob, $gender, $member_id);
 
