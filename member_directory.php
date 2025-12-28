@@ -8,6 +8,7 @@ include 'navbar.php';
 
 <h1>Member Directory</h1>
 
+<h2>Register New Member</h2>
 <form action="add_member.php" method="post">
 	<p>
 		<label for="name">Name:</label>
@@ -46,6 +47,7 @@ include 'navbar.php';
 	</p>
 </form>
 
+<h2>Member List</h2>
 <table>
 	<tr>
 		<th>ID</th>
