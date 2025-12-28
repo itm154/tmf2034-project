@@ -44,18 +44,14 @@ if ($stmt) {
 		<select id="history" name="history_id" required>
 			<?php
 			$combo_query_sql = file_get_contents('queries/class/trainer_program_history.sql');
-			if ($combo_query_sql === false) {
-				echo '<option value="">Error: Unable to load history data.</option>';
-			} else {
-				$combo_result = $conn->query($combo_query_sql);
-				if ($combo_result && $combo_result->num_rows > 0) {
-					while ($combo = $combo_result->fetch_assoc()) {
-						$selected = ($combo['history_id'] == $class_info['history_id']) ? 'selected' : '';
-						echo '<option value="' . $combo['history_id'] . '" ' . $selected . '>' . $combo['person_name'] . ' - ' . $combo['program_name'] . '</option>';
-					}
-				} else {
-					echo '<option value="">No history available</option>';
+			$combo_result = $conn->query($combo_query_sql);
+			if ($combo_result->num_rows > 0) {
+				while ($combo = $combo_result->fetch_assoc()) {
+					$selected = ($combo['history_id'] == $class_info['history_id']) ? 'selected' : '';
+					echo '<option value="' . $combo['history_id'] . '" ' . $selected . '>' . $combo['person_name'] . ' - ' . $combo['program_name'] . '</option>';
 				}
+			} else {
+				echo '<option value="">No history available</option>';
 			}
 			?>
 		</select>
