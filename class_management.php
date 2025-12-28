@@ -12,7 +12,7 @@ include 'navbar.php';
 		<label for="trainer">Trainer:</label>
 		<select id="trainer" name="trainer_id" required>
 			<?php
-			$trainers_query = "SELECT T.person_id, P.person_name FROM Trainer T JOIN Person P ON T.person_id = P.person_id ORDER BY P.person_name";
+			$trainers_query = file_get_contents('queries/class/trainers.sql');
 			$trainers_result = $conn->query($trainers_query);
 			while ($trainer = $trainers_result->fetch_assoc()):
 			?>

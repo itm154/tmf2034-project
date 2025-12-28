@@ -9,7 +9,7 @@ include("db_connect.php");
 	$member_id = $_GET['member_id'];
 
 	// Fetch member's info
-	$member_query = "SELECT p.person_name, p.person_contact, p.person_dob, p.person_gender, m.membership_type_id, m.membership_status FROM Person p JOIN Member m ON p.person_id = m.person_id WHERE m.person_id = ?";
+	$member_query = file_get_contents('queries/member/view_member_info.sql');
 	$stmt = $conn->prepare($member_query);
 	$stmt->bind_param("i", $member_id);
 	$stmt->execute();

@@ -14,25 +14,26 @@ if (isset($_POST['add_trainer'])) {
 	$cert = $_POST['cert'];
 
 	// Insert into Person
-	$conn->query("
-        INSERT INTO Person (person_name, person_contact, person_dob, person_gender)
-        VALUES ('$name', '$contact', '$dob', '$gender')
-    ");
-
+	$stmt = $conn->prepare("INSERT INTO Person (person_name, person_contact, person_dob, person_gender) VALUES (?, ?, ?, ?)");
+	$stmt->bind_param("ssss", $name, $contact, $dob, $gender);
+	$stmt->execute();
 	$person_id = $conn->insert_id;
+	$stmt->close();
 
 	// Insert into Trainer
-	$conn->query("
-        INSERT INTO Trainer (person_id, trainer_specialization, trainer_cert_lvl)
-        VALUES ($person_id, '$specialization', '$cert')
-    ");
+	$stmt = $conn->prepare("INSERT INTO Trainer (person_id, trainer_specialization, trainer_cert_lvl) VALUES (?, ?, ?)");
+	$stmt->bind_param("iss", $person_id, $specialization, $cert);
+	$stmt->execute();
+	$stmt->close();
 }
 
 // ================= DELETE TRAINER =================
 if (isset($_GET['delete'])) {
 	$id = $_GET['delete'];
-	// Cascade delete handles Trainer
-	$conn->query("DELETE FROM Person WHERE person_id = $id");
+	$stmt = $conn->prepare("DELETE FROM Person WHERE person_id = ?");
+	$stmt->bind_param("i", $id);
+	$stmt->execute();
+	$stmt->close();
 }
 
 // ================= EDIT TRAINER =================
@@ -41,57 +42,44 @@ $edit = [];
 
 if (isset($_GET['edit'])) {
 	$edit_id = $_GET['edit'];
-	$res = $conn->query("
-        SELECT p.*, t.trainer_specialization, t.trainer_cert_lvl
-        FROM Person p
-        JOIN Trainer t ON p.person_id = t.person_id
-        WHERE p.person_id = $edit_id
-    ");
+	$query = file_get_contents('queries/trainer/edit_trainer_info.sql');
+	$stmt = $conn->prepare($query);
+	$stmt->bind_param("i", $edit_id);
+	$stmt->execute();
+	$res = $stmt->get_result();
 	$edit = $res->fetch_assoc();
+	$stmt->close();
 }
 
 // ================= UPDATE TRAINER =================
 if (isset($_POST['update_trainer'])) {
 	$id = $_POST['id'];
 
-	$conn->query("
-        UPDATE Person SET
-            person_name='{$_POST['name']}',
-            person_contact='{$_POST['contact']}',
-            person_dob='{$_POST['dob']}',
-            person_gender='{$_POST['gender']}'
-        WHERE person_id=$id
-    ");
+	$query = file_get_contents('queries/person/update_person.sql');
+	$stmt = $conn->prepare($query);
+	$stmt->bind_param("ssssi", $_POST['name'], $_POST['contact'], $_POST['dob'], $_POST['gender'], $id);
+	$stmt->execute();
+	$stmt->close();
 
-	$conn->query("
-        UPDATE Trainer SET
-            trainer_specialization='{$_POST['specialization']}',
-            trainer_cert_lvl='{$_POST['cert']}'
-        WHERE person_id=$id
-    ");
+	$stmt = $conn->prepare("UPDATE Trainer SET trainer_specialization=?, trainer_cert_lvl=? WHERE person_id=?");
+	$stmt->bind_param("ssi", $_POST['specialization'], $_POST['cert'], $id);
+	$stmt->execute();
+	$stmt->close();
 }
 
 // ================= FETCH TRAINERS =================
-$trainers = $conn->query("
-    SELECT p.person_id, p.person_name, p.person_contact,
-           t.trainer_specialization, t.trainer_cert_lvl
-    FROM Person p
-    JOIN Trainer t ON p.person_id = t.person_id
-");
+$query = file_get_contents('queries/trainer/trainers_list.sql');
+$stmt = $conn->prepare($query);
+$stmt->execute();
+$trainers = $stmt->get_result();
+$stmt->close();
 
 // ================= TRAINER PERFORMANCE =================
-$performance = $conn->query("
-    SELECT 
-        p.person_name AS trainer_name,
-        COUNT(c.class_id) AS total_classes_taught,
-        SUM(CASE WHEN a.attendance_status='Absent' THEN 1 ELSE 0 END) AS total_missed_classes
-    FROM Trainer t
-    JOIN Person p ON t.person_id = p.person_id
-    JOIN Trainer_Program_History tph ON t.person_id = tph.trainer_person_id
-    JOIN Class c ON tph.history_id = c.history_id
-    LEFT JOIN Attendance a ON c.class_id = a.class_id
-    GROUP BY p.person_id
-");
+$query = file_get_contents('queries/trainer/trainer_performance.sql');
+$stmt = $conn->prepare($query);
+$stmt->execute();
+$performance = $stmt->get_result();
+$stmt->close();
 ?>
 
 <h1>Trainer management</h1>

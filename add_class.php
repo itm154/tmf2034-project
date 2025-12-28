@@ -7,7 +7,7 @@ if (isset($_POST['submit'])) {
 	$class_datetime = $_POST['class_datetime'];
 
 	// Find or create a new trainer-program history entry
-	$history_query = $conn->prepare("SELECT history_id FROM Trainer_Program_History WHERE trainer_person_id = ? AND program_id = ? AND (end_date IS NULL OR end_date >= CURDATE())");
+	$history_query = $conn->prepare(file_get_contents('queries/class/get_history_id.sql'));
 	$history_query->bind_param("ii", $trainer_id, $program_id);
 	$history_query->execute();
 	$result = $history_query->get_result();
@@ -23,7 +23,6 @@ if (isset($_POST['submit'])) {
 		if ($history_insert_query->execute()) {
 			$history_id = $conn->insert_id;
 		} else {
-			// Using JS alert and history back to show error and not lose form data
 			echo "<script>alert('Error creating trainer-program history: " . $conn->error . "');</script>";
 			exit();
 		}
