@@ -53,7 +53,7 @@ include 'navbar.php';
 		<th>Program</th>
 		<th>Class Status</th>
 		<th>Date and Time</th>
-		<th>Actions</th>
+		<th colspan="2">Actions</th>
 
 	</tr>
 
@@ -78,6 +78,9 @@ include 'navbar.php';
 			</td>
 			<td>
 				<?php echo $row['class_datetime'] ?>
+			</td>
+			<td>
+				<a href="edit_class.php?class_id=<?php echo $row['class_id'] ?>">Update</a>
 			</td>
 			<td>
 				<a href="delete_class.php?class_id=<?php echo $row['class_id'] ?>" onclick="return confirm('Are you sure you want to delete this class?');">Delete</a>
