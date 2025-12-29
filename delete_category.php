@@ -27,7 +27,6 @@ if (isset($_GET['id'])) {
 			header("Location: programs_management.php");
 			exit;
 		} else {
-			// This could happen if there's another unexpected error
 			echo "<script>
                     alert('Error deleting category: " . $delete_stmt->error . "');
                     window.location.href = 'programs_management.php';

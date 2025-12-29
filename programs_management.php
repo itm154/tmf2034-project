@@ -6,6 +6,7 @@ include 'navbar.php';
 
 <h1>Programs management</h1>
 
+<h2>Add programs</h2>
 <form action="add_program.php" method="post">
 	<p>
 		<label for="program_name">Program Name:</label>
@@ -40,7 +41,8 @@ include 'navbar.php';
 	</p>
 </form>
 
-<h2>Programs</h2>
+<h2>Program List</h2>
+
 <table>
 	<th>Program Name</th>
 	<th>Program Duration (Weeks)</th>
@@ -59,7 +61,7 @@ include 'navbar.php';
 			<td><?php echo $row['program_fee'] ?></td>
 			<td><?php echo $row['category_name'] ?></td>
 			<td>
-				<a href="">Edit</a>
+				<a href="edit_program.php?id=<?php echo $row['program_id'] ?>">Edit</a>
 			</td>
 			<td>
 				<a href="delete_program.php?id=<?php echo $row['program_id'] ?>" onclick="return confirm('Are you sure you want to delete this program?')">Delete</a>
@@ -67,6 +69,8 @@ include 'navbar.php';
 		</tr>
 	<?php } ?>
 </table>
+
+<h2>Add Categories</h2>
 
 <form action="add_category.php" method="post">
 	<p>
@@ -79,7 +83,8 @@ include 'navbar.php';
 	</p>
 </form>
 
-<h2>Program Categories</h2>
+<h2>Category List</h2>
+
 <table>
 	<th>Program category</th>
 	<th colspan="2">Actions</th>
@@ -92,7 +97,7 @@ include 'navbar.php';
 		<tr>
 			<td><?php echo $row['category_name'] ?></td>
 			<td>
-				<a href="">Edit</a>
+				<a href="edit_category.php?id=<?php echo $row['category_id'] ?>">Edit</a>
 			</td>
 			<td>
 				<a href="delete_category.php?id=<?php echo $row['category_id'] ?>" onclick="return confirm('Are you sure you want to delete this category?')">Delete</a>
