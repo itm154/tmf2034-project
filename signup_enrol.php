@@ -94,6 +94,16 @@ $name = trim($_POST['name']);
 
         <label>Email *</label>
         <input type="email" name="email" required>
+        
+        <label>Date of Birth *</label>
+        <input type="date" name="dob" required>
+
+        <label>Gender *</label>
+        <select name="gender" required>
+            <option value="">-- choose --</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
 
         <label>Invoice Amount (RM) *</label>
         <input type="number" step="0.01" name="amount" required>
