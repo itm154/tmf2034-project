@@ -1,6 +1,6 @@
 <?php
 include 'db_connect.php';
-
+include 'navbar.php';
 $message="";
 
 if (isset($_POST['submit'])) {
