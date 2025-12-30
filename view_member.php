@@ -61,143 +61,166 @@ if ($member_id) {
 include 'navbar.php';
 ?>
 
-<h1>Member Information</h1>
+<div class="container mt-4">
 
-<?php if (isset($error_message)) : ?>
-	<p style="color: red;"><?php echo $error_message; ?></p>
-<?php endif; ?>
+	<h1 class="display-4 mb-4">Member Information</h1>
+
+	<?php if (isset($error_message)) : ?>
+		<div class="alert alert-danger" role="alert">
+			<?php echo $error_message; ?>
+		</div>
+	<?php endif; ?>
 
 
-<?php if ($member_info) { ?>
-	<form action="<?php echo $_SERVER["PHP_SELF"]; ?>?member_id=<?php echo $member_id; ?>" method="post">
-		<input type="hidden" name="member_id" value="<?php echo $member_id; ?>">
+	<?php if ($member_info) { ?>
+		<form action="<?php echo $_SERVER["PHP_SELF"]; ?>?member_id=<?php echo $member_id; ?>" method="post">
+			<input type="hidden" name="member_id" value="<?php echo $member_id; ?>">
 
-		<p>
-			<label for="name">Name:</label>
-			<input type="text" id="name" name="name" value="<?php echo $member_info['person_name']; ?>" required>
-		</p>
+			<div class="mb-3">
+				<label for="name" class="form-label">Name:</label>
+				<input type="text" id="name" name="name" class="form-control" value="<?php echo $member_info['person_name']; ?>" required>
+			</div>
 
-		<p>
-			<label for="contact">Contact:</label>
-			<input type="text" id="contact" name="contact" value="<?php echo $member_info['person_contact']; ?>" required>
-		</p>
+			<div class="mb-3">
+				<label for="contact" class="form-label">Contact:</label>
+				<input type="text" id="contact" name="contact" class="form-control" value="<?php echo $member_info['person_contact']; ?>" required>
+			</div>
 
-		<p>
-			<label for="dob">Date of Birth:</label>
-			<input type="date" id="dob" name="dob" value="<?php echo $member_info['person_dob']; ?>" required>
-		</p>
+			<div class="mb-3">
+				<label for="dob" class="form-label">Date of Birth:</label>
+				<input type="date" id="dob" name="dob" class="form-control" value="<?php echo $member_info['person_dob']; ?>" required>
+			</div>
 
-		<p>
-			<label for="gender">Gender:</label>
-			<select id="gender" name="gender" required>
-				<option value="Male" <?php if ($member_info['person_gender'] == 'Male') echo 'selected="selected"'; ?>>Male</option>
-				<option value="Female" <?php if ($member_info['person_gender'] == 'Female') echo 'selected="selected"'; ?>>Female</option>
-			</select>
-		</p>
+			<div class="mb-3">
+				<label for="gender" class="form-label">Gender:</label>
+				<select id="gender" name="gender" class="form-select" required>
+					<option value="Male" <?php if ($member_info['person_gender'] == 'Male') echo 'selected="selected"'; ?>>Male</option>
+					<option value="Female" <?php if ($member_info['person_gender'] == 'Female') echo 'selected="selected"'; ?>>Female</option>
+				</select>
+			</div>
 
-		<p>
-			<label for="membership_type">Membership type:</label>
-			<select id="membership_type" name="membership_type" required>
-				<option value=1 <?php if ($member_info['membership_type_id'] == 1) echo 'selected="selected"'; ?>>Basic</option>
-				<option value=2 <?php if ($member_info['membership_type_id'] == 2) echo 'selected="selected"'; ?>>Premium</option>
-				<option value=3 <?php if ($member_info['membership_type_id'] == 3) echo 'selected="selected"'; ?>>Gold</option>
-			</select>
-		</p>
+			<div class="mb-3">
+				<label for="membership_type" class="form-label">Membership type:</label>
+				<select id="membership_type" name="membership_type" class="form-select" required>
+					<option value=1 <?php if ($member_info['membership_type_id'] == 1) echo 'selected="selected"'; ?>>Basic</option>
+					<option value=2 <?php if ($member_info['membership_type_id'] == 2) echo 'selected="selected"'; ?>>Premium</option>
+					<option value=3 <?php if ($member_info['membership_type_id'] == 3) echo 'selected="selected"'; ?>>Gold</option>
+				</select>
+			</div>
 
-		<p>
-			<label for="membership_status">Membership status:</label>
-			<select id="membership_status" name="membership_status" required>
-				<option value="Active" <?php if ($member_info['membership_status'] == 'Active') echo 'selected="selected"'; ?>>Active</option>
-				<option value="Inactive" <?php if ($member_info['membership_status'] == 'Inactive') echo 'selected="selected"'; ?>>Inactive</option>
-				<option value="Suspended" <?php if ($member_info['membership_status'] == 'Suspended') echo 'selected="selected"'; ?>>Suspended</option>
-			</select>
-		</p>
+			<div class="mb-3">
+				<label for="membership_status" class="form-label">Membership status:</label>
+				<select id="membership_status" name="membership_status" class="form-select" required>
+					<option value="Active" <?php if ($member_info['membership_status'] == 'Active') echo 'selected="selected"'; ?>>Active</option>
+					<option value="Inactive" <?php if ($member_info['membership_status'] == 'Inactive') echo 'selected="selected"'; ?>>Inactive</option>
+					<option value="Suspended" <?php if ($member_info['membership_status'] == 'Suspended') echo 'selected="selected"'; ?>>Suspended</option>
+				</select>
+			</div>
 
-		<p>
-			<input type="submit" name="submit" value="Save Changes">
-		</p>
-	</form>
+			<div class="mb-3">
+				<button type="submit" name="submit" class="btn btn-primary">Save Changes</button>
+			</div>
+		</form>
 
-	<h2>Enrolled Programs</h2>
-	<table>
-		<tr>
-			<th>Program Name</th>
-			<th>Category</th>
-			<th>Enrolment Date</th>
-		</tr>
-		<?php
-		$program_query = file_get_contents('queries/member/member_programs.sql');
-		$stmt = $conn->prepare($program_query);
-		$stmt->bind_param("i", $member_id);
-		$stmt->execute();
-		$result = $stmt->get_result();
-		while ($row = $result->fetch_assoc()) {
-		?>
-			<tr>
-				<td><?php echo $row['program_name']; ?></td>
-				<td><?php echo $row['category_name']; ?></td>
-				<td><?php echo $row['enrolment_date']; ?></td>
-			</tr>
-		<?php }
-		$stmt->close(); ?>
-	</table>
+		<h2 class="mb-3">Enrolled Programs</h2>
+		<div class="table-responsive">
+			<table class="table table-striped table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>Program Name</th>
+						<th>Category</th>
+						<th>Enrolment Date</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					$program_query = file_get_contents('queries/member/member_programs.sql');
+					$stmt = $conn->prepare($program_query);
+					$stmt->bind_param("i", $member_id);
+					$stmt->execute();
+					$result = $stmt->get_result();
+					while ($row = $result->fetch_assoc()) {
+					?>
+						<tr>
+							<td><?php echo $row['program_name']; ?></td>
+							<td><?php echo $row['category_name']; ?></td>
+							<td><?php echo $row['enrolment_date']; ?></td>
+						</tr>
+					<?php }
+					$stmt->close(); ?>
+				</tbody>
+			</table>
+		</div>
 
-	<h2>Class Attendance History</h2>
-	<table>
-		<tr>
-			<th>Program Name</th>
-			<th>Class Date & Time</th>
-			<th>Status</th>
-		</tr>
-		<?php
-		$attendance_query = file_get_contents('queries/member/member_attendance.sql');
-		$stmt = $conn->prepare($attendance_query);
-		$stmt->bind_param("i", $member_id);
-		$stmt->execute();
-		$result = $stmt->get_result();
-		while ($row = $result->fetch_assoc()) {
-		?>
-			<tr>
-				<td><?php echo $row['program_name']; ?></td>
-				<td><?php echo $row['class_datetime']; ?></td>
-				<td><?php echo $row['attendance_status']; ?></td>
-			</tr>
-		<?php }
-		$stmt->close(); ?>
-	</table>
+		<h2 class="mb-3">Class Attendance History</h2>
+		<div class="table-responsive">
+			<table class="table table-striped table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>Program Name</th>
+						<th>Class Date & Time</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					$attendance_query = file_get_contents('queries/member/member_attendance.sql');
+					$stmt = $conn->prepare($attendance_query);
+					$stmt->bind_param("i", $member_id);
+					$stmt->execute();
+					$result = $stmt->get_result();
+					while ($row = $result->fetch_assoc()) {
+					?>
+						<tr>
+							<td><?php echo $row['program_name']; ?></td>
+							<td><?php echo $row['class_datetime']; ?></td>
+							<td><?php echo $row['attendance_status']; ?></td>
+						</tr>
+					<?php }
+					$stmt->close(); ?>
+				</tbody>
+			</table>
+		</div>
 
-	<h2>Payments (Invoices)</h2>
-	<table>
-		<tr>
-			<th>Program Name</th>
-			<th>Invoice Date</th>
-			<th>Amount</th>
-			<th>Payment Method</th>
-		</tr>
-		<?php
-		$payment_query = file_get_contents('queries/member/member_payment.sql');
-		$stmt = $conn->prepare($payment_query);
-		$stmt->bind_param("i", $member_id);
-		$stmt->execute();
-		$result = $stmt->get_result();
-		while ($row = $result->fetch_assoc()) {
-		?>
-			<tr>
-				<td><?php echo $row['program_name']; ?></td>
-				<td><?php echo $row['invoice_date']; ?></td>
-				<td><?php echo $row['invoice_amount']; ?></td>
-				<td><?php echo $row['invoice_payment_method']; ?></td>
-			</tr>
-		<?php }
-		$stmt->close(); ?>
-	</table>
+		<h2 class="mb-3">Payments (Invoices)</h2>
+		<div class="table-responsive">
+			<table class="table table-striped table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>Program Name</th>
+						<th>Invoice Date</th>
+						<th>Amount (RM)</th>
+						<th>Payment Method</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					$payment_query = file_get_contents('queries/member/member_payment.sql');
+					$stmt = $conn->prepare($payment_query);
+					$stmt->bind_param("i", $member_id);
+					$stmt->execute();
+					$result = $stmt->get_result();
+					while ($row = $result->fetch_assoc()) {
+					?>
+						<tr>
+							<td><?php echo $row['program_name']; ?></td>
+							<td><?php echo $row['invoice_date']; ?></td>
+							<td><?php echo $row['invoice_amount']; ?></td>
+							<td><?php echo $row['invoice_payment_method']; ?></td>
+						</tr>
+					<?php }
+					$stmt->close(); ?>
+				</tbody>
+			</table>
+		</div>
 
-<?php } else {
-	if (isset($_REQUEST['member_id'])) {
-		echo "<p>Member not found.</p>";
-	} else {
-		echo "<p>No member ID specified.</p>";
-	}
-} ?>
+	<?php } else {
+		if (isset($_REQUEST['member_id'])) {
+			echo "<p>Member not found.</p>";
+		} else {
+			echo "<p>No member ID specified.</p>";
+		}
+	} ?>
+</div>
 
 <?php $conn->close(); ?>
