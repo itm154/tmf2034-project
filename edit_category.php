@@ -36,19 +36,27 @@ if ($category_id) {
 include 'navbar.php';
 ?>
 
-<?php if (isset($error_message)) : ?>
-	<p style="color: red;"><?php echo $error_message; ?></p>
-<?php endif; ?>
+<div class="container mt-4">
+	<h1 class="display-4 mb-4">Edit Program Category</h1>
 
-<h1>Edit Program Category</h1>
+	<?php if (isset($error_message)) : ?>
+		<div class="alert alert-danger" role="alert">
+			<?php echo $error_message; ?>
+		</div>
+	<?php endif; ?>
 
-<form action="<?php echo $_SERVER["PHP_SELF"] . "?id=" . $category_id; ?>" method="post">
-	<p>
-		<label for="category_name">Category name:</label>
-		<input type="text" id="category_name" name="category_name" value="<?php echo $category['category_name']; ?>" required>
-	</p>
+	<?php if ($category) : ?>
+		<form action="<?php echo $_SERVER["PHP_SELF"] . "?id=" . $category_id; ?>" method="post">
+			<div class="mb-3">
+				<label for="category_name" class="form-label">Category name:</label>
+				<input type="text" id="category_name" name="category_name" class="form-control" value="<?php echo $category['category_name']; ?>" required>
+			</div>
 
-	<p>
-		<input type="submit" name="submit" value="Update Category">
-	</p>
-</form>
+			<button type="submit" name="submit" class="btn btn-primary">Update Category</button>
+		</form>
+	<?php else: ?>
+		<div class="alert alert-warning" role="alert">
+			Could not retrieve category details.
+		</div>
+	<?php endif; ?>
+</div>
