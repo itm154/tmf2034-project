@@ -214,13 +214,18 @@ include 'navbar.php';
 			</table>
 		</div>
 
-	<?php } else {
-		if (isset($_REQUEST['member_id'])) {
-			echo "<p>Member not found.</p>";
-		} else {
-			echo "<p>No member ID specified.</p>";
-		}
+		<?php } else {
+		if (isset($_REQUEST['member_id'])):  ?>
+			<div class="alert alert-danger">
+				Member not found
+			</div>
+		<?php else:  ?>
+			<div class="alert alert-danger">
+				Member ID not specified
+			</div>
+	<?php endif;
 	} ?>
+
 </div>
 
 <?php $conn->close(); ?>
