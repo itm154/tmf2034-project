@@ -53,7 +53,7 @@ include 'navbar.php';
 					<th scope="col">Membership Tier</th>
 					<th scope="col">Status</th>
 					<th scope="col">Joined Programs</th>
-					<th scope="col" colspan="2">Actions</th>
+					<th scope="col">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -80,10 +80,10 @@ include 'navbar.php';
 							<?php echo $row['program_count'] ?>
 						</td>
 						<td>
-							<a href="view_member.php?member_id=<?php echo $row['person_id'] ?>" class="btn btn-info btn-sm">View</a>
-						</td>
-						<td>
-							<a href="delete_member.php?member_id=<?php echo $row['person_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this member?');">Delete</a>
+							<div class="d-flex gap-2">
+								<a href="view_member.php?member_id=<?php echo $row['person_id'] ?>" class="btn btn-info btn-sm">View</a>
+								<a href="delete_member.php?member_id=<?php echo $row['person_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this member?');">Delete</a>
+							</div>
 						</td>
 					</tr>
 				<?php } ?>
