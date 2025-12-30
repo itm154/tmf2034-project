@@ -5,30 +5,27 @@ $message="";
 
 if (isset($_POST['submit'])) {
 
-    //get form data
-    $name   = trim($_POST['name']);
+$name = trim($_POST['name']);
     $contact = trim($_POST['contact']);
-    $email  = trim($_POST['email']);
+    $dob = $_POST['dob'];
+    $gender = $_POST['gender'];
     $amount = floatval($_POST['amount']);
 
-    if ($name === "" || $email === "" || $amount <= 0) {
+    if ($name === "" || $dob === "" || $gender === "" || $amount <= 0) {
         $message = "Please fill in all required fields.";
     } else {
-
-        // use transaction (important for enrolment + invoice)
         $conn->begin_transaction();
 
         try {
             //Insert into Person
             $person_stmt = $conn->prepare(
-                "INSERT INTO Person (person_name, person_contact, person_email)
-                 VALUES (?, ?, ?)"
+                "INSERT INTO Person (person_name, person_contact, person_dob, person_gender)
+                 VALUES (?, ?, ?, ?)"
             );
-            $person_stmt->bind_param("sss", $name, $contact, $email);
+            if (!$person_stmt) throw new Exception("Prepare Person failed: " . $conn->error);
 
-            if (!$person_stmt->execute()) {
-                throw new Exception("Error adding person");
-            }
+            $person_stmt->bind_param("ssss", $name, $contact, $dob, $gender);
+            if (!$person_stmt->execute()) throw new Exception("Person insert failed: " . $person_stmt->error);
 
             $person_id = $conn->insert_id;
             $person_stmt->close();
@@ -38,11 +35,10 @@ if (isset($_POST['submit'])) {
                 "INSERT INTO Enrolment (person_id, enrolment_date, enrolment_status)
                  VALUES (?, CURDATE(), 'Pending')"
             );
-            $enrol_stmt->bind_param("i", $person_id);
+            if (!$enrol_stmt) throw new Exception("Prepare Enrolment failed: " . $conn->error);
 
-            if (!$enrol_stmt->execute()) {
-                throw new Exception("Error creating enrolment");
-            }
+            $enrol_stmt->bind_param("i", $person_id);
+            if (!$enrol_stmt->execute()) throw new Exception("Enrolment insert failed: " . $enrol_stmt->error);
 
             $enrolment_id = $conn->insert_id;
             $enrol_stmt->close();
@@ -52,22 +48,19 @@ if (isset($_POST['submit'])) {
                 "INSERT INTO Invoice (enrolment_id, invoice_date, invoice_amount, invoice_status)
                  VALUES (?, CURDATE(), ?, 'Unpaid')"
             );
-            $invoice_stmt->bind_param("id", $enrolment_id, $amount);
+            if (!$invoice_stmt) throw new Exception("Prepare Invoice failed: " . $conn->error);
 
-            if (!$invoice_stmt->execute()) {
-                throw new Exception("Error creating invoice");
-            }
+            $invoice_stmt->bind_param("id", $enrolment_id, $amount);
+            if (!$invoice_stmt->execute()) throw new Exception("Invoice insert failed: " . $invoice_stmt->error);
 
             $invoice_stmt->close();
 
-            // commit everything
             $conn->commit();
-
-            $message = "Enrolment and invoice successfully created.";
+            $message = "✅ Enrolment and invoice successfully created.";
 
         } catch (Exception $e) {
             $conn->rollback();
-            $message = "Failed to create enrolment.";
+            $message = "❌ " . $e->getMessage();
         }
     }
 }
