@@ -82,107 +82,121 @@ $performance = $stmt->get_result();
 $stmt->close();
 ?>
 
-<h1>Trainer management</h1>
+<div class="container mt-4">
+	<h1 class="display-4 mb-4">Trainer management</h1>
 
-<!-- ================= ADD / UPDATE FORM ================= -->
-<h2>Add / Update Trainer</h2>
+	<!-- ================= ADD / UPDATE FORM ================= -->
+	<h2 class="mb-3">Add / Update Trainer</h2>
 
-<form method="POST">
-	<input type="hidden" name="id" value="<?php echo $edit_id; ?>">
+	<form method="POST">
+		<input type="hidden" name="id" value="<?php echo $edit_id; ?>">
 
-	<p>
-		<label for="name">Name:</label>
-		<input type="text" id="name" name="name" required
-			value="<?php echo $edit['person_name'] ?? ''; ?>">
-	</p>
+		<div class="mb-3">
+			<label for="name" class="form-label">Name:</label>
+			<input type="text" id="name" name="name" class="form-control" required
+				value="<?php echo $edit['person_name'] ?? ''; ?>">
+		</div>
 
-	<p>
-		<label for="contact">Contact:</label>
-		<input type="text" id="contact" name="contact" required
-			value="<?php echo $edit['person_contact'] ?? ''; ?>">
-	</p>
+		<div class="mb-3">
+			<label for="contact" class="form-label">Contact:</label>
+			<input type="text" id="contact" name="contact" class="form-control" required
+				value="<?php echo $edit['person_contact'] ?? ''; ?>">
+		</div>
 
-	<p>
-		<label for="dob">Date of Birth:</label>
-		<input type="date" id="dob" name="dob" required
-			value="<?php echo $edit['person_dob'] ?? ''; ?>">
-	</p>
+		<div class="mb-3">
+			<label for="dob" class="form-label">Date of Birth:</label>
+			<input type="date" id="dob" name="dob" class="form-control" required
+				value="<?php echo $edit['person_dob'] ?? ''; ?>">
+		</div>
 
-	<p>
-		<label for="gender">Gender:</label>
-		<select id="gender" name="gender" required>
-			<option value="Male" <?php if (($edit['person_gender'] ?? '') == 'Male') echo 'selected'; ?>>Male</option>
-			<option value="Female" <?php if (($edit['person_gender'] ?? '') == 'Female') echo 'selected'; ?>>Female</option>
-		</select>
-	</p>
+		<div class="mb-3">
+			<label for="gender" class="form-label">Gender:</label>
+			<select id="gender" name="gender" class="form-select" required>
+				<option value="Male" <?php if (($edit['person_gender'] ?? '') == 'Male'): echo 'selected';
+															endif; ?>>Male</option>
+				<option value="Female" <?php if (($edit['person_gender'] ?? '') == 'Female'): echo 'selected';
+																endif; ?>>Female</option>
+			</select>
+		</div>
 
-	<p>
-		<label for="specialization">Specialization:</label>
-		<input type="text" id="specialization" name="specialization" required
-			value="<?php echo $edit['trainer_specialization'] ?? ''; ?>">
-	</p>
+		<div class="mb-3">
+			<label for="specialization" class="form-label">Specialization:</label>
+			<input type="text" id="specialization" name="specialization" class="form-control" required
+				value="<?php echo $edit['trainer_specialization'] ?? ''; ?>">
+		</div>
 
-	<p>
-		<label for="cert">Certification Level:</label>
-		<input type="text" id="cert" name="cert" required
-			value="<?php echo $edit['trainer_cert_lvl'] ?? ''; ?>">
-	</p>
+		<div class="mb-3">
+			<label for="cert" class="form-label">Certification Level:</label>
+			<input type="text" id="cert" name="cert" class="form-control" required
+				value="<?php echo $edit['trainer_cert_lvl'] ?? ''; ?>">
+		</div>
 
-	<p>
-		<?php if ($edit_id) { ?>
-			<input type="submit" name="update_trainer" value="Update Trainer">
-			<a href="trainer_management.php">Cancel</a>
-		<?php } else { ?>
-			<input type="submit" name="add_trainer" value="Add Trainer">
-		<?php } ?>
-	</p>
-</form>
+		<div class="d-flex gap-2">
+			<?php if ($edit_id): ?>
+				<button type="submit" name="update_trainer" class="btn btn-primary">Update Trainer</button>
+				<a href="trainer_management.php" class="btn btn-secondary">Cancel</a>
+			<?php else: ?>
+				<button type="submit" name="add_trainer" class="btn btn-primary">Add Trainer</button>
+			<?php endif; ?>
+		</div>
+	</form>
 
-<!-- ================= TRAINER LIST ================= -->
-<h2>Trainer List</h2>
-<table>
-	<tr>
-		<th>ID</th>
-		<th>Name</th>
-		<th>Contact</th>
-		<th>Specialization</th>
-		<th>Cert</th>
-		<th colspan="2">Actions</th>
-	</tr>
+	<!-- ================= TRAINER LIST ================= -->
+	<h2 class="mb-3">Trainer List</h2>
+	<div class="table-responsive">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Contact</th>
+					<th>Specialization</th>
+					<th>Cert</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php while ($t = $trainers->fetch_assoc()): ?>
+					<tr>
+						<td><?php echo $t['person_id']; ?></td>
+						<td><?php echo $t['person_name']; ?></td>
+						<td><?php echo $t['person_contact']; ?></td>
+						<td><?php echo $t['trainer_specialization']; ?></td>
+						<td><?php echo $t['trainer_cert_lvl']; ?></td>
+						<td>
+							<div class="d-flex gap-2">
+								<a href="?edit=<?php echo $t['person_id']; ?>" class="btn btn-info btn-sm">Edit</a>
+								<a href="?delete=<?php echo $t['person_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete trainer?')">Delete</a>
+							</div>
+						</td>
+					</tr>
+				<?php endwhile; ?>
+			</tbody>
+		</table>
+	</div>
 
-	<?php while ($t = $trainers->fetch_assoc()) { ?>
-		<tr>
-			<td><?php echo $t['person_id']; ?></td>
-			<td><?php echo $t['person_name']; ?></td>
-			<td><?php echo $t['person_contact']; ?></td>
-			<td><?php echo $t['trainer_specialization']; ?></td>
-			<td><?php echo $t['trainer_cert_lvl']; ?></td>
-			<td>
-				<a href="?edit=<?php echo $t['person_id']; ?>">Edit</a>
-			</td>
-			<td>
-				<a href="?delete=<?php echo $t['person_id']; ?>" onclick="return confirm('Delete trainer?')">Delete</a>
-			</td>
-		</tr>
-	<?php } ?>
-</table>
-
-<!-- ================= PERFORMANCE REPORT ================= -->
-<h2>Trainer Performance Report</h2>
-<table>
-	<tr>
-		<th>Trainer Name</th>
-		<th>Total Classes Taught</th>
-		<th>Total Missed Classes</th>
-	</tr>
-
-	<?php while ($p = $performance->fetch_assoc()) { ?>
-		<tr>
-			<td><?php echo $p['trainer_name']; ?></td>
-			<td><?php echo $p['total_classes_taught']; ?></td>
-			<td><?php echo $p['total_missed_classes'] ?? 0; ?></td>
-		</tr>
-	<?php } ?>
-</table>
+	<!-- ================= PERFORMANCE REPORT ================= -->
+	<h2 class="mb-3">Trainer Performance Report</h2>
+	<div class="table-responsive">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>Trainer Name</th>
+					<th>Total Classes Taught</th>
+					<th>Total Missed Classes</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php while ($p = $performance->fetch_assoc()): ?>
+					<tr>
+						<td><?php echo $p['trainer_name']; ?></td>
+						<td><?php echo $p['total_classes_taught']; ?></td>
+						<td><?php echo $p['total_missed_classes'] ?? 0; ?></td>
+					</tr>
+				<?php endwhile; ?>
+			</tbody>
+		</table>
+	</div>
+</div>
 
 <?php $conn->close(); ?>
