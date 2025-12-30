@@ -30,9 +30,12 @@ if ($stmt) {
 } else {
 	$error_message = "Error preparing statement: " . $conn->error;
 }
-?>
 
-<?php include 'navbar.php'; ?>
+include 'navbar.php'; ?>
+
+<?php if (isset($error_message)) : ?>
+	<p style="color: red;"><?php echo $error_message; ?></p>
+<?php endif; ?>
 
 <h1>Edit Class</h1>
 

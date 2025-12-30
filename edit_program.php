@@ -38,6 +38,10 @@ if ($program_id) {
 include 'navbar.php';
 ?>
 
+<?php if (isset($error_message)) : ?>
+	<p style="color: red;"><?php echo $error_message; ?></p>
+<?php endif; ?>
+
 <h1>Edit Program</h1>
 
 <form action="<?php echo $_SERVER["PHP_SELF"] . "?id=" . $program_id; ?>" method="post">

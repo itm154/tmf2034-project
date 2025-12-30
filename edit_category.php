@@ -32,8 +32,13 @@ if ($category_id) {
 	$stmt->close();
 }
 
+
 include 'navbar.php';
 ?>
+
+<?php if (isset($error_message)) : ?>
+	<p style="color: red;"><?php echo $error_message; ?></p>
+<?php endif; ?>
 
 <h1>Edit Program Category</h1>
 
