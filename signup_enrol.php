@@ -3,6 +3,34 @@ include 'db_connect.php';
 include 'navbar.php';
 $message="";
 
+$members = [];
+$sqlMembers = "
+    SELECT m.person_id, p.person_name
+    FROM Member m
+    JOIN Person p ON p.person_id = m.person_id
+    ORDER BY p.person_name ASC
+";
+
+$resMembers = $conn->query($sqlMembers);
+if ($resMembers) {
+    while ($row = $resMembers->fetch_assoc()) {
+        $members[] = $row;
+    }
+}
+
+$programs = [];
+$sqlPrograms = "
+    SELECT program_id, program_name, program_fee
+    FROM Program
+    ORDER BY program_name ASC
+";
+$resPrograms = $conn->query($sqlPrograms);
+if ($resPrograms) {
+    while ($row = $resPrograms->fetch_assoc()) {
+        $programs[] = $row;
+    }
+}
+
 if (isset($_POST['submit'])) {
 
 $name = trim($_POST['name']);
