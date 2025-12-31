@@ -24,16 +24,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 		$stmt_class = $conn->prepare($query_class);
 		$stmt_class->bind_param("issi", $history_id, $class_datetime, $class_status, $class_id);
 
-		if ($stmt_class->execute()) {
+		$class_updated = $stmt_class->execute();
+		$stmt_class->close();
+
+		$attendance_updated = true;
+		if (isset($_POST['attendance']) && is_array($_POST['attendance'])) {
+			$query_attendance = "UPDATE Attendance SET attendance_status = ? WHERE person_id = ? AND class_id = ?";
+			$stmt_attendance = $conn->prepare($query_attendance);
+
+			foreach ($_POST['attendance'] as $person_id => $status) {
+				$stmt_attendance->bind_param("sii", $status, $person_id, $class_id);
+				if (!$stmt_attendance->execute()) {
+					$attendance_updated = false;
+					$error_message = "Error updating attendance: " . $stmt_attendance->error;
+					break;
+				}
+			}
+			$stmt_attendance->close();
+		}
+
+		if ($class_updated && $attendance_updated) {
 			$conn->commit();
-			header("Location: class_management.php");
+			header("Location: " . $_SERVER["PHP_SELF"] . "?class_id=" . $class_id);
 			exit();
 		} else {
 			$conn->rollback();
-			$error_message = "Error updating class: " . $stmt_class->error;
+			if (!$class_updated) {
+				$error_message = "Error updating class: " . $stmt_class->error;
+			}
 		}
-
-		$stmt_class->close();
 	} else {
 		$error_message = "Please fill in all fields!";
 	}
@@ -63,7 +82,7 @@ include 'navbar.php';
 ?>
 
 <div class="container mt-4">
-	<h1 class="display-4 mb-4">Edit Class</h1>
+	<h1 class="display-4 mb-4">Class Information</h1>
 
 	<?php if (isset($error_message)) : ?>
 		<div class="alert alert-danger" role="alert">
@@ -71,6 +90,7 @@ include 'navbar.php';
 		</div>
 	<?php endif; ?>
 
+	<h2 class="mb-3">Edit</h2>
 	<?php if ($class_info) : ?>
 		<form action="<?php echo $_SERVER["PHP_SELF"] . "?class_id=" . $class_id; ?>" method="post">
 			<input type="hidden" name="class_id" value="<?php echo $class_info['class_id']; ?>">
@@ -107,7 +127,24 @@ include 'navbar.php';
 				</select>
 			</div>
 
-			<button type="submit" name="submit" class="btn btn-primary">Update Class</button>
+			<hr class="my-4">
+
+			<h2 class="mb-4">Attendance</h2>
+
+			<div class="table-responsive">
+				<table class="table table-striped table-hover">
+					<thead>
+						<tr>
+							<th>Member Name</th>
+							<th>Attendance Status</th>
+						</tr>
+					</thead>
+					<?php include 'class_attendance_table.php'; ?>
+					</tbody>
+				</table>
+			</div>
+
+			<button type="submit" name="submit" class="btn btn-primary">Update Class and Attendance</button>
 		</form>
 	<?php else: ?>
 		<div class="alert alert-warning" role="alert">

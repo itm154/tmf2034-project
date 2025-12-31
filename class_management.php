@@ -80,7 +80,7 @@ include 'navbar.php';
 						</td>
 						<td>
 							<div class="d-flex gap-2">
-								<a href="edit_class.php?class_id=<?php echo $row['class_id'] ?>" class="btn btn-info btn-sm">Update</a>
+								<a href="view_class.php?class_id=<?php echo $row['class_id'] ?>" class="btn btn-info btn-sm">View</a>
 								<a href="delete_class.php?class_id=<?php echo $row['class_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this class?');">Delete</a>
 							</div>
 						</td>
