@@ -7,6 +7,45 @@ include 'navbar.php';
 <div class="container mt-4">
 	<h1 class="display-4 mb-4">Programs management</h1>
 
+	<h2 class="mb-3">Add Categories</h2>
+	<form action="add_category.php" method="post">
+		<div class="mb-3">
+			<label for="category_name" class="form-label">Category name:</label>
+			<input type="text" id="category_name" name="category_name" class="form-control" required>
+		</div>
+		<button type="submit" name="submit" class="btn btn-primary">Add Category</button>
+	</form>
+
+	<h2 class="mb-3">Category List</h2>
+	<div class="table-responsive">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>Program category</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				$query = "SELECT * FROM Program_Category ORDER BY category_name ASC";
+				$result = $conn->query($query);
+
+				while ($row = mysqli_fetch_assoc($result)) {
+				?>
+					<tr>
+						<td><?php echo $row['category_name'] ?></td>
+						<td>
+							<div class="d-flex gap-2">
+								<a href="edit_category.php?id=<?php echo $row['category_id'] ?>" class="btn btn-info btn-sm">Edit</a>
+								<a href="delete_category.php?id=<?php echo $row['category_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?')">Delete</a>
+							</div>
+						</td>
+					</tr>
+				<?php } ?>
+			</tbody>
+		</table>
+	</div>
+
 	<h2 class="mb-3">Add programs</h2>
 	<form action="add_program.php" method="post">
 		<div class="mb-3">
@@ -68,45 +107,6 @@ include 'navbar.php';
 							<div class="d-flex gap-2">
 								<a href="edit_program.php?id=<?php echo $row['program_id'] ?>" class="btn btn-info btn-sm">Edit</a>
 								<a href="delete_program.php?id=<?php echo $row['program_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this program?')">Delete</a>
-							</div>
-						</td>
-					</tr>
-				<?php } ?>
-			</tbody>
-		</table>
-	</div>
-
-	<h2 class="mb-3">Add Categories</h2>
-	<form action="add_category.php" method="post">
-		<div class="mb-3">
-			<label for="category_name" class="form-label">Category name:</label>
-			<input type="text" id="category_name" name="category_name" class="form-control" required>
-		</div>
-		<button type="submit" name="submit" class="btn btn-primary">Add Category</button>
-	</form>
-
-	<h2 class="mb-3">Category List</h2>
-	<div class="table-responsive">
-		<table class="table table-striped table-hover">
-			<thead>
-				<tr>
-					<th>Program category</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php
-				$query = "SELECT * FROM Program_Category ORDER BY category_name ASC";
-				$result = $conn->query($query);
-
-				while ($row = mysqli_fetch_assoc($result)) {
-				?>
-					<tr>
-						<td><?php echo $row['category_name'] ?></td>
-						<td>
-							<div class="d-flex gap-2">
-								<a href="edit_category.php?id=<?php echo $row['category_id'] ?>" class="btn btn-info btn-sm">Edit</a>
-								<a href="delete_category.php?id=<?php echo $row['category_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?')">Delete</a>
 							</div>
 						</td>
 					</tr>
