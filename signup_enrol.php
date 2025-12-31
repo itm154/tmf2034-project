@@ -92,44 +92,53 @@ if (isset($_POST['submit'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Enrolment</title>
+    <title>Signup / Enrol</title>
     <style>
         body { font-family: Arial, sans-serif; }
-        .container { width: 400px; margin: 40px auto; }
-        input, button { width: 100%; padding: 8px; margin-top: 6px; }
+        .container { width: 450px; margin: 40px auto; }
+        select, button { width: 100%; padding: 8px; margin-top: 6px; }
+        .msg { padding: 10px; border: 1px solid #ccc; margin: 10px 0; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Enrolment Form</h2>
+    <h1>Signup / Enrol</h1>
 
     <?php if ($message): ?>
-        <p><?php echo htmlspecialchars($message); ?></p>
+        <div class="msg"><?php echo htmlspecialchars($message); ?></div>
     <?php endif; ?>
 
     <form method="POST">
-        <label>Full Name *</label>
-        <input type="text" name="name" required>
 
-        <label>Contact</label>
-        <input type="text" name="contact">
-
-        <label>Email *</label>
-        <input type="email" name="email" required>
-        
-        <label>Date of Birth *</label>
-        <input type="date" name="dob" required>
-
-        <label>Gender *</label>
-        <select name="gender" required>
-            <option value="">-- choose --</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
+        <label>Member *</label>
+        <select name="member_person_id" required>
+            <option value="">-- Select Member --</option>
+            <?php foreach ($members as $m): ?>
+                <option value="<?php echo (int)$m['person_id']; ?>">
+                    <?php echo htmlspecialchars($m['person_name']); ?> (ID: <?php echo (int)$m['person_id']; ?>)
+                </option>
+            <?php endforeach; ?>
         </select>
 
-        <label>Invoice Amount (RM) *</label>
-        <input type="number" step="0.01" name="amount" required>
+        <label>Program *</label>
+        <select name="program_id" required>
+            <option value="">-- Select Program --</option>
+            <?php foreach ($programs as $p): ?>
+                <option value="<?php echo (int)$p['program_id']; ?>">
+                    <?php echo htmlspecialchars($p['program_name']); ?>
+                    (RM <?php echo number_format((float)$p['program_fee'], 2); ?>)
+                </option>
+            <?php endforeach; ?>
+        </select>
+
+        <label>Payment Method *</label>
+        <select name="payment_method" required>
+            <option value="">-- Select Payment Method --</option>
+            <option value="Cash">Cash</option>
+            <option value="Card">Card</option>
+            <option value="Online">Online</option>
+        </select>
 
         <button type="submit" name="submit">Submit Enrolment</button>
     </form>
