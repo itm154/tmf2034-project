@@ -33,62 +33,57 @@ if ($resPrograms) {
 
 if (isset($_POST['submit'])) {
 
-$name = trim($_POST['name']);
-    $contact = trim($_POST['contact']);
-    $dob = $_POST['dob'];
-    $gender = $_POST['gender'];
-    $amount = floatval($_POST['amount']);
+    $member_person_id = intval($_POST['member_person_id'] ?? 0);
+    $program_id = intval($_POST['program_id'] ?? 0);
+    $payment_method = trim($_POST['payment_method'] ?? "");
 
-    if ($name === "" || $dob === "" || $gender === "" || $amount <= 0) {
-        $message = "Please fill in all required fields.";
+    if ($member_person_id <= 0 || $program_id <= 0 || $payment_method === "") {
+        $message = "❌ Please select a Member, Program, and Payment Method.";
     } else {
-        $conn->begin_transaction();
+        $stmtFee = $conn->prepare("SELECT program_fee FROM Program WHERE program_id = ?");
+        $stmtFee->bind_param("i", $program_id);
+        $stmtFee->execute();
+        $feeRow = $stmtFee->get_result()->fetch_assoc();
+        $stmtFee->close();
 
-        try {
-            //Insert into Person
-            $person_stmt = $conn->prepare(
-                "INSERT INTO Person (person_name, person_contact, person_dob, person_gender)
-                 VALUES (?, ?, ?, ?)"
-            );
-            if (!$person_stmt) throw new Exception("Prepare Person failed: " . $conn->error);
+        if (!$feeRow) {
+            $message = "❌ Program not found.";
+        } else {
 
-            $person_stmt->bind_param("ssss", $name, $contact, $dob, $gender);
-            if (!$person_stmt->execute()) throw new Exception("Person insert failed: " . $person_stmt->error);
+            $fee = (float)$feeRow['program_fee'];
 
-            $person_id = $conn->insert_id;
-            $person_stmt->close();
+            // Use transaction so enrolment + invoice succeed together
+            $conn->begin_transaction();
 
-            //Insert into Enrolment
-            $enrol_stmt = $conn->prepare(
-                "INSERT INTO Enrolment (person_id, enrolment_date, enrolment_status)
-                 VALUES (?, CURDATE(), 'Pending')"
-            );
-            if (!$enrol_stmt) throw new Exception("Prepare Enrolment failed: " . $conn->error);
+            try {
+                $stmtEnrol = $conn->prepare("
+                    INSERT INTO Enrolment (enrolment_date, program_id, member_person_id)
+                    VALUES (CURDATE(), ?, ?)
+                ");
+                $stmtEnrol->bind_param("ii", $program_id, $member_person_id);
+                if (!$stmtEnrol->execute()) {
+                    throw new Exception("Enrolment insert failed: " . $stmtEnrol->error);
+                }
+                $enrolment_id = $conn->insert_id;
+                $stmtEnrol->close();
 
-            $enrol_stmt->bind_param("i", $person_id);
-            if (!$enrol_stmt->execute()) throw new Exception("Enrolment insert failed: " . $enrol_stmt->error);
+                $stmtInv = $conn->prepare("
+                    INSERT INTO Invoice (invoice_date, invoice_amount, invoice_payment_method, enrolment_id)
+                    VALUES (CURDATE(), ?, ?, ?)
+                ");
+                $stmtInv->bind_param("dsi", $fee, $payment_method, $enrolment_id);
+                if (!$stmtInv->execute()) {
+                    throw new Exception("Invoice insert failed: " . $stmtInv->error);
+                }
+                $stmtInv->close();
 
-            $enrolment_id = $conn->insert_id;
-            $enrol_stmt->close();
+                $conn->commit();
+                $message = "✅ Enrolment created and invoice generated.";
 
-            //Insert into Invoice
-            $invoice_stmt = $conn->prepare(
-                "INSERT INTO Invoice (enrolment_id, invoice_date, invoice_amount, invoice_status)
-                 VALUES (?, CURDATE(), ?, 'Unpaid')"
-            );
-            if (!$invoice_stmt) throw new Exception("Prepare Invoice failed: " . $conn->error);
-
-            $invoice_stmt->bind_param("id", $enrolment_id, $amount);
-            if (!$invoice_stmt->execute()) throw new Exception("Invoice insert failed: " . $invoice_stmt->error);
-
-            $invoice_stmt->close();
-
-            $conn->commit();
-            $message = "✅ Enrolment and invoice successfully created.";
-
-        } catch (Exception $e) {
-            $conn->rollback();
-            $message = "❌ " . $e->getMessage();
+            } catch (Exception $e) {
+                $conn->rollback();
+                $message = "❌ " . $e->getMessage();
+            }
         }
     }
 }
