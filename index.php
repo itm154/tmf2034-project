@@ -14,5 +14,3 @@
     <li><a href="trainer_management.php">Trainer Management</a></li>
     <li><a href="cf_attendance_report.php">Attendance Analytics</a></li>
 </ul>
-
-<?php $conn->close(); ?>
