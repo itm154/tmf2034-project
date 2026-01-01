@@ -6,187 +6,197 @@ include 'navbar.php';
 <?php
 // ================= ADD TRAINER =================
 if (isset($_POST['add_trainer'])) {
-	$name = $_POST['name'];
-	$contact = $_POST['contact'];
-	$dob = $_POST['dob'];
-	$gender = $_POST['gender'];
-	$specialization = $_POST['specialization'];
-	$cert = $_POST['cert'];
+	$person_name = $_POST['name'];
+	$person_contact = $_POST['contact'];
+	$person_dob = $_POST['dob'];
+	$person_gender = $_POST['gender'];
+	$trainer_specialization = $_POST['specialization'];
+	$trainer_cert_lvl = $_POST['cert'];
 
 	// Insert into Person
-	$stmt = $conn->prepare("INSERT INTO Person (person_name, person_contact, person_dob, person_gender) VALUES (?, ?, ?, ?)");
-	$stmt->bind_param("ssss", $name, $contact, $dob, $gender);
-	$stmt->execute();
+	$person_stmt = $conn->prepare("INSERT INTO Person (person_name, person_contact, person_dob, person_gender) VALUES (?, ?, ?, ?)");
+	$person_stmt->bind_param("ssss", $person_name, $person_contact, $person_dob, $person_gender);
+	$person_stmt->execute();
 	$person_id = $conn->insert_id;
-	$stmt->close();
+	$person_stmt->close();
 
 	// Insert into Trainer
-	$stmt = $conn->prepare("INSERT INTO Trainer (person_id, trainer_specialization, trainer_cert_lvl) VALUES (?, ?, ?)");
-	$stmt->bind_param("iss", $person_id, $specialization, $cert);
-	$stmt->execute();
-	$stmt->close();
+	$trainer_stmt = $conn->prepare("INSERT INTO Trainer (person_id, trainer_specialization, trainer_cert_lvl) VALUES (?, ?, ?)");
+	$trainer_stmt->bind_param("iss", $person_id, $trainer_specialization, $trainer_cert_lvl);
+	$trainer_stmt->execute();
+	$trainer_stmt->close();
 }
 
 // ================= DELETE TRAINER =================
 if (isset($_GET['delete'])) {
-	$id = $_GET['delete'];
-	$stmt = $conn->prepare("DELETE FROM Person WHERE person_id = ?");
-	$stmt->bind_param("i", $id);
-	$stmt->execute();
-	$stmt->close();
+	$delete_id = $_GET['delete'];
+	$delete_stmt = $conn->prepare("DELETE FROM Person WHERE person_id = ?");
+	$delete_stmt->bind_param("i", $delete_id);
+	$delete_stmt->execute();
+	$delete_stmt->close();
 }
 
 // ================= EDIT TRAINER =================
 $edit_id = "";
-$edit = [];
+$edit_data = null;
 
 if (isset($_GET['edit'])) {
 	$edit_id = $_GET['edit'];
-	$query = file_get_contents('queries/trainer/edit_trainer_info.sql');
-	$stmt = $conn->prepare($query);
-	$stmt->bind_param("i", $edit_id);
-	$stmt->execute();
-	$res = $stmt->get_result();
-	$edit = $res->fetch_assoc();
-	$stmt->close();
+	$query = file_get_contents('queries/trainer/select_trainer_details.sql');
+	$edit_stmt = $conn->prepare($query);
+	$edit_stmt->bind_param("i", $edit_id);
+	$edit_stmt->execute();
+	$edit_result = $edit_stmt->get_result();
+	$edit_data = $edit_result->fetch_assoc();
+	$edit_stmt->close();
 }
 
 // ================= UPDATE TRAINER =================
 if (isset($_POST['update_trainer'])) {
-	$id = $_POST['id'];
+	$update_id = $_POST['id'];
 
-	$query = file_get_contents('queries/person/update_person.sql');
-	$stmt = $conn->prepare($query);
-	$stmt->bind_param("ssssi", $_POST['name'], $_POST['contact'], $_POST['dob'], $_POST['gender'], $id);
-	$stmt->execute();
-	$stmt->close();
+	$query = file_get_contents('queries/person/update_person_details.sql');
+	$update_person_stmt = $conn->prepare($query);
+	$update_person_stmt->bind_param("ssssi", $_POST['name'], $_POST['contact'], $_POST['dob'], $_POST['gender'], $update_id);
+	$update_person_stmt->execute();
+	$update_person_stmt->close();
 
-	$stmt = $conn->prepare("UPDATE Trainer SET trainer_specialization=?, trainer_cert_lvl=? WHERE person_id=?");
-	$stmt->bind_param("ssi", $_POST['specialization'], $_POST['cert'], $id);
-	$stmt->execute();
-	$stmt->close();
+	$update_trainer_stmt = $conn->prepare("UPDATE Trainer SET trainer_specialization=?, trainer_cert_lvl=? WHERE person_id=?");
+	$update_trainer_stmt->bind_param("ssi", $_POST['specialization'], $_POST['cert'], $update_id);
+	$update_trainer_stmt->execute();
+	$update_trainer_stmt->close();
 }
 
 // ================= FETCH TRAINERS =================
-$query = file_get_contents('queries/trainer/trainers_list.sql');
-$stmt = $conn->prepare($query);
-$stmt->execute();
-$trainers = $stmt->get_result();
-$stmt->close();
+$query = file_get_contents('queries/trainer/select_trainers_list.sql');
+$trainers_stmt = $conn->prepare($query);
+$trainers_stmt->execute();
+$trainers = $trainers_stmt->get_result();
+$trainers_stmt->close();
 
 // ================= TRAINER PERFORMANCE =================
-$query = file_get_contents('queries/trainer/trainer_performance.sql');
-$stmt = $conn->prepare($query);
-$stmt->execute();
-$performance = $stmt->get_result();
-$stmt->close();
+$query = file_get_contents('queries/trainer/select_trainers_performance.sql');
+$performance_stmt = $conn->prepare($query);
+$performance_stmt->execute();
+$performance = $performance_stmt->get_result();
+$performance_stmt->close();
 ?>
 
-<h1>Trainer management</h1>
+<div class="container mt-4">
+	<h1 class="display-4 mb-4">Trainer management</h1>
 
-<!-- ================= ADD / UPDATE FORM ================= -->
-<div class="card">
-	<h2>Add / Update Trainer</h2>
+	<!-- ================= ADD / UPDATE FORM ================= -->
+	<h2 class="mb-3">Add / Update Trainer</h2>
 
 	<form method="POST">
 		<input type="hidden" name="id" value="<?php echo $edit_id; ?>">
 
-		<p>
-			<label for="name">Name:</label>
-			<input type="text" id="name" name="name" required
-				value="<?php echo $edit['person_name'] ?? ''; ?>">
-		</p>
+		<div class="mb-3">
+			<label for="name" class="form-label">Name:</label>
+			<input type="text" id="name" name="name" class="form-control" required
+				value="<?php echo $edit_data['person_name'] ?? ''; ?>">
+		</div>
 
-		<p>
-			<label for="contact">Contact:</label>
-			<input type="text" id="contact" name="contact" required
-				value="<?php echo $edit['person_contact'] ?? ''; ?>">
-		</p>
+		<div class="mb-3">
+			<label for="contact" class="form-label">Contact:</label>
+			<input type="text" id="contact" name="contact" class="form-control" required
+				value="<?php echo $edit_data['person_contact'] ?? ''; ?>">
+		</div>
 
-		<p>
-			<label for="dob">Date of Birth:</label>
-			<input type="date" id="dob" name="dob" required
-				value="<?php echo $edit['person_dob'] ?? ''; ?>">
-		</p>
+		<div class="mb-3">
+			<label for="dob" class="form-label">Date of Birth:</label>
+			<input type="date" id="dob" name="dob" class="form-control" required
+				value="<?php echo $edit_data['person_dob'] ?? ''; ?>">
+		</div>
 
-		<p>
-			<label for="gender">Gender:</label>
-			<select id="gender" name="gender" required>
-				<option value="Male" <?php if (($edit['person_gender'] ?? '') == 'Male') echo 'selected'; ?>>Male</option>
-				<option value="Female" <?php if (($edit['person_gender'] ?? '') == 'Female') echo 'selected'; ?>>Female</option>
+		<div class="mb-3">
+			<label for="gender" class="form-label">Gender:</label>
+			<select id="gender" name="gender" class="form-select" required>
+				<option value="Male" <?php if (($edit_data['person_gender'] ?? '') == 'Male'): echo 'selected';
+															endif; ?>>Male</option>
+				<option value="Female" <?php if (($edit_data['person_gender'] ?? '') == 'Female'): echo 'selected';
+																endif; ?>>Female</option>
 			</select>
-		</p>
+		</div>
 
-		<p>
-			<label for="specialization">Specialization:</label>
-			<input type="text" id="specialization" name="specialization" required
-				value="<?php echo $edit['trainer_specialization'] ?? ''; ?>">
-		</p>
+		<div class="mb-3">
+			<label for="specialization" class="form-label">Specialization:</label>
+			<input type="text" id="specialization" name="specialization" class="form-control" required
+				value="<?php echo $edit_data['trainer_specialization'] ?? ''; ?>">
+		</div>
 
-		<p>
-			<label for="cert">Certification Level:</label>
-			<input type="text" id="cert" name="cert" required
-				value="<?php echo $edit['trainer_cert_lvl'] ?? ''; ?>">
-		</p>
+		<div class="mb-3">
+			<label for="cert" class="form-label">Certification Level:</label>
+			<input type="text" id="cert" name="cert" class="form-control" required
+				value="<?php echo $edit_data['trainer_cert_lvl'] ?? ''; ?>">
+		</div>
 
-		<p>
-			<?php if ($edit_id) { ?>
-				<input type="submit" name="update_trainer" value="Update Trainer">
-				<a href="trainer_management.php">Cancel</a>
-			<?php } else { ?>
-				<input type="submit" name="add_trainer" value="Add Trainer">
-			<?php } ?>
-		</p>
+		<div class="d-flex gap-2">
+			<?php if ($edit_id): ?>
+				<button type="submit" name="update_trainer" class="btn btn-primary">Update Trainer</button>
+				<a href="trainer_management.php" class="btn btn-secondary">Cancel</a>
+			<?php else: ?>
+				<button type="submit" name="add_trainer" class="btn btn-primary">Add Trainer</button>
+			<?php endif; ?>
+		</div>
 	</form>
-</div>
 
-<!-- ================= TRAINER LIST ================= -->
-<div class="card">
-	<h2>Trainer List</h2>
-	<table>
-		<tr>
-			<th>ID</th>
-			<th>Name</th>
-			<th>Contact</th>
-			<th>Specialization</th>
-			<th>Cert</th>
-			<th>Actions</th>
-		</tr>
+	<!-- ================= TRAINER LIST ================= -->
+	<h2 class="mb-3">Trainer List</h2>
+	<div class="table-responsive">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Contact</th>
+					<th>Specialization</th>
+					<th>Cert</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php while ($trainer = $trainers->fetch_assoc()): ?>
+					<tr>
+						<td><?php echo $trainer['person_id']; ?></td>
+						<td><?php echo $trainer['person_name']; ?></td>
+						<td><?php echo $trainer['person_contact']; ?></td>
+						<td><?php echo $trainer['trainer_specialization']; ?></td>
+						<td><?php echo $trainer['trainer_cert_lvl']; ?></td>
+						<td>
+							<div class="d-flex gap-2">
+								<a href="?edit=<?php echo $trainer['person_id']; ?>" class="btn btn-info btn-sm">Edit</a>
+								<a href="?delete=<?php echo $trainer['person_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete trainer?')">Delete</a>
+							</div>
+						</td>
+					</tr>
+				<?php endwhile; ?>
+			</tbody>
+		</table>
+	</div>
 
-		<?php while ($t = $trainers->fetch_assoc()) { ?>
-			<tr>
-				<td><?php echo $t['person_id']; ?></td>
-				<td><?php echo $t['person_name']; ?></td>
-				<td><?php echo $t['person_contact']; ?></td>
-				<td><?php echo $t['trainer_specialization']; ?></td>
-				<td><?php echo $t['trainer_cert_lvl']; ?></td>
-				<td>
-					<a href="?edit=<?php echo $t['person_id']; ?>">Edit</a> |
-					<a href="?delete=<?php echo $t['person_id']; ?>" onclick="return confirm('Delete trainer?')">Delete</a>
-				</td>
-			</tr>
-		<?php } ?>
-	</table>
-</div>
-
-<!-- ================= PERFORMANCE REPORT ================= -->
-<div class="card">
-	<h2>Trainer Performance Report</h2>
-	<table>
-		<tr>
-			<th>Trainer Name</th>
-			<th>Total Classes Taught</th>
-			<th>Total Missed Classes</th>
-		</tr>
-
-		<?php while ($p = $performance->fetch_assoc()) { ?>
-			<tr>
-				<td><?php echo $p['trainer_name']; ?></td>
-				<td><?php echo $p['total_classes_taught']; ?></td>
-				<td><?php echo $p['total_missed_classes'] ?? 0; ?></td>
-			</tr>
-		<?php } ?>
-	</table>
+	<!-- ================= PERFORMANCE REPORT ================= -->
+	<h2 class="mb-3">Trainer Performance Report</h2>
+	<div class="table-responsive">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>Trainer Name</th>
+					<th>Total Classes Taught</th>
+					<th>Total Missed Classes</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php while ($performance_report = $performance->fetch_assoc()): ?>
+					<tr>
+						<td><?php echo $performance_report['trainer_name']; ?></td>
+						<td><?php echo $performance_report['total_classes_taught']; ?></td>
+						<td><?php echo $performance_report['total_missed_classes'] ?? 0; ?></td>
+					</tr>
+				<?php endwhile; ?>
+			</tbody>
+		</table>
+	</div>
 </div>
 
 <?php $conn->close(); ?>
