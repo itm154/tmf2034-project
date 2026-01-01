@@ -27,6 +27,8 @@
 				<li class="nav-item">
 					<a class="nav-link" href="programs_management.php">Programs management</a>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="attendance_analytics.php">Attendance analytics</a>
 			</ul>
 		</div>
 	</div>

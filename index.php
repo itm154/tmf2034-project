@@ -11,6 +11,19 @@ $quarterly_fees = $conn->query($quarterly_fee_query);
 <div class="container mt-4">
 	<h1 class="display-4 mb-4">Dashboard</h1>
 
+	<div class="row mb-4">
+		<div class="col-md-6">
+			<div class="alert alert-success" role="alert">
+				20% off on all YOGA classes this month!
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="alert alert-info" role="alert">
+				HIIT class COMING SOON!
+			</div>
+		</div>	
+	</div>
+
 	<?php
 	$top_programs_query = file_get_contents('queries/dashboard/select_top5_programs.sql');
 	$top_programs = $conn->query($top_programs_query);
@@ -79,7 +92,6 @@ $quarterly_fees = $conn->query($quarterly_fee_query);
 			<?php endwhile; ?>
 		</table>
 	</div>
-
 
 
 </div>
