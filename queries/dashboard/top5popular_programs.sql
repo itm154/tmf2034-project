@@ -1,6 +1,6 @@
 SELECT
     p.program_name,
-    pc.catagory_name,
+    pc.category_name,
     COUNT(e.enrolment_id) AS total_enrolled,
     per.person_name AS trainer_name
 FROM Enrolment e
@@ -8,8 +8,8 @@ JOIN Program p
     ON e.program_id = p.program_id
 JOIN Program_Category pc
     ON p.category_id = pc.category_id
-JOIN Trainer_Program_Histpry tph
-    ON tph.program_id = p.program_i
+JOIN Trainer_Program_History tph
+    ON tph.program_id = p.program_id
     AND tph.end_date IS NULL
 JOIN Trainer t
     ON tph.trainer_person_id = t.person_id

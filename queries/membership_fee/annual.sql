@@ -1,5 +1,5 @@
 SELECT
-    YEAR(m.membership_start_date) AS year
+    YEAR(m.membership_start_date) AS year,
     SUM(mt.monthly_fee * 12) AS total_annual_fee
 FROM Member m
 JOIN Membership_Type mt

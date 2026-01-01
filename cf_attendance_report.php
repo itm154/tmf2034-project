@@ -1,3 +1,18 @@
+<?php
+include "db_connect.php";
+?>
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Attendance Analytics</title>
+</head>
+<body>
+
+<h2>Attendance Analytics</h2>
+
+<?php
+$q4 = $conn->query("
 SELECT
     p.person_name AS member_name,
     COUNT(a.attendance_id) AS total_classes,
@@ -25,4 +40,27 @@ JOIN Member m
 JOIN Person p
     ON m.person_id = p.person_id
 GROUP BY p.person_name
-ORDER BY attendance_percentage DESC;
+");
+?>
+
+<table border="1">
+    <tr>
+        <th>Member</th>
+        <th>Total</th>
+        <th>Attended</th>
+        <th>Attendance %</th>
+</tr>
+
+<?php while ($row = $q4->fetch_assoc()): ?>
+<tr>
+    <td><?= $row['member_name'] ?></td>
+    <td><?= $row['total_classes'] ?></td>
+    <td><?= $row['attended_classes'] ?></td>
+    <td><?= $row['absent_classes'] ?></td>
+    <td><?= $row['attendance_percentage'] ?>%</td>
+</tr>
+<?php endwhile; ?>
+</table>
+
+</body>
+</html>
