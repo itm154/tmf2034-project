@@ -3,5 +3,87 @@ include 'navbar.php';
 include 'db_connect.php';
 ?>
 
-<h1>Dashboard</h1>
+<?php
+$quarterly_fee_query = file_get_contents('queries/dashboard/select_quarterly_fee.sql');
+$quarterly_fees = $conn->query($quarterly_fee_query);
+?>
+
+<div class="container mt-4">
+	<h1 class="display-4 mb-4">Dashboard</h1>
+
+	<?php
+	$top_programs_query = file_get_contents('queries/dashboard/select_top5_programs.sql');
+	$top_programs = $conn->query($top_programs_query);
+	?>
+
+	<h2 class="mb-3">Top 5 Most Popular Programs</h2>
+	<div class="table-responsive">
+		<table class="table table-striped table-hover table-bordered">
+			<thead>
+				<tr>
+					<th>Program</th>
+					<th>Category</th>
+					<th>Total Enrolled</th>
+					<th>Trainer Name</th>
+				</tr>
+			</thead>
+			<?php while ($row = $top_programs->fetch_assoc()): ?>
+				<tr>
+					<td><?= $row['program_name'] ?></td>
+					<td><?= $row['category_name'] ?></td>
+					<td><?= $row['total_enrolled'] ?></td>
+					<td><?= $row['trainer_name'] ?></td>
+				</tr>
+			<?php endwhile; ?>
+		</table>
+	</div>
+
+	<h2 class="mb-3">Quarterly Fees</h2>
+	<div class="table-responsive">
+		<table class="table table-striped table-hover table-bordered">
+			<thead>
+				<tr>
+					<th>Year</th>
+					<th>Quarter</th>
+					<th>Total Fee (RM)</th>
+				</tr>
+			</thead>
+			<?php while ($row = $quarterly_fees->fetch_assoc()): ?>
+				<tr>
+					<td><?= $row['year'] ?></td>
+					<td><?= $row['quarter'] ?></td>
+					<td><?= number_format($row['total_quarterly_fee'], 2) ?></td>
+				</tr>
+			<?php endwhile; ?>
+		</table>
+	</div>
+
+
+	<?php
+	$annual_fee_query = file_get_contents('queries/dashboard/select_annual_fee.sql');
+	$annual_fees = $conn->query($annual_fee_query);
+	?>
+
+	<h2 class="mb-3">Annual Fees</h2>
+	<div class="table-responsive">
+		<table class="table table-striped table-hover table-bordered">
+			<thead>
+				<tr>
+					<th>Year</th>
+					<th>Total Annual Fee (RM)</th>
+				</tr>
+			</thead>
+			<?php while ($row = $annual_fees->fetch_assoc()): ?>
+				<tr>
+					<td><?= $row['year'] ?></td>
+					<td><?= number_format($row['total_annual_fee'], 2) ?></td>
+				</tr>
+			<?php endwhile; ?>
+		</table>
+	</div>
+
+
+
+</div>
+
 <?php $conn->close(); ?>
