@@ -1,5 +1,5 @@
 <nav>
-	<a href="index.php">Dashboard</a>
+	<a href="dashboard.php">Dashboard</a>
 	<a href="member_directory.php">Member directory</a>
 	<a href="class_management.php">Class management</a>
 	<a href="signup_enrol.php">Signup/Enrol</a>

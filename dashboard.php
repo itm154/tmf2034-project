@@ -1,8 +1,3 @@
-<?php
-include "db_connect.php";
-include 'navbar.php';
-?>
-
 <!DOCTYPE html>
 <html>
     <head>

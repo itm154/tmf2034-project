@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Fit Life System</title>
-</head>
-<body>
+<?php
+include "db_connect.php";
+include 'navbar.php';
+?>
 
-<h1>Fit Life System Board</h1>
+<h1>Welcome to FitLife Gym System</h1>
+<p>Please use the navigation bar to access system features.</p>
 
-<ul>
-    <li><a href="dashboard.php">Dashboard</a></li>
-    <li><a href="member_directory.php">Member Directory</a></li>
-    <li><a href="class_management.php">Class management</a></li>
-    <li><a href="trainer_management.php">Trainer Management</a></li>
-    <li><a href="cf_attendance_report.php">Attendance Analytics</a></li>
-</ul>
+<?php $conn->close(); ?>
