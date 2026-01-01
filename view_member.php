@@ -11,10 +11,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 
 	if (isset($_POST['member_id'], $_POST['name'], $_POST['contact'], $_POST['dob'], $_POST['gender'], $_POST['membership_type'], $_POST['membership_status'])) {
 		$member_id = $_POST['member_id'];
-		$name = $_POST['name'];
-		$contact = $_POST['contact'];
-		$dob = $_POST['dob'];
-		$gender = $_POST['gender'];
+		$person_name = $_POST['name'];
+		$person_contact = $_POST['contact'];
+		$person_dob = $_POST['dob'];
+		$person_gender = $_POST['gender'];
 		$membership_type = $_POST['membership_type'];
 		$membership_status = $_POST['membership_status'];
 
@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 
 		$query_person = file_get_contents('queries/person/update_person_details.sql');
 		$stmt_person = $conn->prepare($query_person);
-		$stmt_person->bind_param("ssssi", $name, $contact, $dob, $gender, $member_id);
+		$stmt_person->bind_param("ssssi", $person_name, $person_contact, $person_dob, $person_gender, $member_id);
 
 		$query_member = "UPDATE Member SET membership_type_id = ?, membership_status = ? WHERE person_id = ?";
 		$stmt_member = $conn->prepare($query_member);
@@ -50,12 +50,12 @@ $member_info = null;
 if ($member_id) {
 	// Fetch member's info
 	$member_query = file_get_contents('queries/member/select_member_details.sql');
-	$stmt = $conn->prepare($member_query);
-	$stmt->bind_param("i", $member_id);
-	$stmt->execute();
-	$result = $stmt->get_result();
-	$member_info = $result->fetch_assoc();
-	$stmt->close();
+	$member_stmt = $conn->prepare($member_query);
+	$member_stmt->bind_param("i", $member_id);
+	$member_stmt->execute();
+	$member_result = $member_stmt->get_result();
+	$member_info = $member_result->fetch_assoc();
+	$member_stmt->close();
 }
 
 include 'navbar.php';
@@ -135,19 +135,19 @@ include 'navbar.php';
 				<tbody>
 					<?php
 					$program_query = file_get_contents('queries/member/select_member_programs.sql');
-					$stmt = $conn->prepare($program_query);
-					$stmt->bind_param("i", $member_id);
-					$stmt->execute();
-					$result = $stmt->get_result();
-					while ($row = $result->fetch_assoc()):
+					$program_stmt = $conn->prepare($program_query);
+					$program_stmt->bind_param("i", $member_id);
+					$program_stmt->execute();
+					$program_result = $program_stmt->get_result();
+					while ($program_row = $program_result->fetch_assoc()):
 					?>
 						<tr>
-							<td><?php echo $row['program_name']; ?></td>
-							<td><?php echo $row['category_name']; ?></td>
-							<td><?php echo $row['enrolment_date']; ?></td>
+							<td><?php echo $program_row['program_name']; ?></td>
+							<td><?php echo $program_row['category_name']; ?></td>
+							<td><?php echo $program_row['enrolment_date']; ?></td>
 						</tr>
 					<?php endwhile;
-					$stmt->close(); ?>
+					$program_stmt->close(); ?>
 				</tbody>
 			</table>
 		</div>
@@ -165,19 +165,19 @@ include 'navbar.php';
 				<tbody>
 					<?php
 					$attendance_query = file_get_contents('queries/member/select_member_attendance.sql');
-					$stmt = $conn->prepare($attendance_query);
-					$stmt->bind_param("i", $member_id);
-					$stmt->execute();
-					$result = $stmt->get_result();
-					while ($row = $result->fetch_assoc()):
+					$attendance_stmt = $conn->prepare($attendance_query);
+					$attendance_stmt->bind_param("i", $member_id);
+					$attendance_stmt->execute();
+					$attendance_result = $attendance_stmt->get_result();
+					while ($attendance_row = $attendance_result->fetch_assoc()):
 					?>
 						<tr>
-							<td><?php echo $row['program_name']; ?></td>
-							<td><?php echo $row['class_datetime']; ?></td>
-							<td><?php echo $row['attendance_status']; ?></td>
+							<td><?php echo $attendance_row['program_name']; ?></td>
+							<td><?php echo $attendance_row['class_datetime']; ?></td>
+							<td><?php echo $attendance_row['attendance_status']; ?></td>
 						</tr>
 					<?php endwhile;
-					$stmt->close(); ?>
+					$attendance_stmt->close(); ?>
 				</tbody>
 			</table>
 		</div>
@@ -196,20 +196,20 @@ include 'navbar.php';
 				<tbody>
 					<?php
 					$payment_query = file_get_contents('queries/member/select_member_payments.sql');
-					$stmt = $conn->prepare($payment_query);
-					$stmt->bind_param("i", $member_id);
-					$stmt->execute();
-					$result = $stmt->get_result();
-					while ($row = $result->fetch_assoc()):
+					$payment_stmt = $conn->prepare($payment_query);
+					$payment_stmt->bind_param("i", $member_id);
+					$payment_stmt->execute();
+					$payment_result = $payment_stmt->get_result();
+					while ($payment_row = $payment_result->fetch_assoc()):
 					?>
 						<tr>
-							<td><?php echo $row['program_name']; ?></td>
-							<td><?php echo $row['invoice_date']; ?></td>
-							<td><?php echo $row['invoice_amount']; ?></td>
-							<td><?php echo $row['invoice_payment_method']; ?></td>
+							<td><?php echo $payment_row['program_name']; ?></td>
+							<td><?php echo $payment_row['invoice_date']; ?></td>
+							<td><?php echo $payment_row['invoice_amount']; ?></td>
+							<td><?php echo $payment_row['invoice_payment_method']; ?></td>
 						</tr>
 					<?php endwhile;
-					$stmt->close(); ?>
+					$payment_stmt->close(); ?>
 				</tbody>
 			</table>
 		</div>
