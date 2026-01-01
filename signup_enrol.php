@@ -1,150 +1,85 @@
 <?php
 include 'db_connect.php';
 include 'navbar.php';
-$message="";
-
-$members = [];
-$sqlMembers = "
-    SELECT m.person_id, p.person_name
-    FROM Member m
-    JOIN Person p ON p.person_id = m.person_id
-    ORDER BY p.person_name ASC
-";
-
-$resMembers = $conn->query($sqlMembers);
-if ($resMembers) {
-    while ($row = $resMembers->fetch_assoc()) {
-        $members[] = $row;
-    }
-}
-
-$programs = [];
-$sqlPrograms = "
-    SELECT program_id, program_name, program_fee
-    FROM Program
-    ORDER BY program_name ASC
-";
-$resPrograms = $conn->query($sqlPrograms);
-if ($resPrograms) {
-    while ($row = $resPrograms->fetch_assoc()) {
-        $programs[] = $row;
-    }
-}
-
-if (isset($_POST['submit'])) {
-
-    $member_person_id = intval($_POST['member_person_id'] ?? 0);
-    $program_id = intval($_POST['program_id'] ?? 0);
-    $payment_method = trim($_POST['payment_method'] ?? "");
-
-    if ($member_person_id <= 0 || $program_id <= 0 || $payment_method === "") {
-        $message = "❌ Please select a Member, Program, and Payment Method.";
-    } else {
-        $stmtFee = $conn->prepare("SELECT program_fee FROM Program WHERE program_id = ?");
-        $stmtFee->bind_param("i", $program_id);
-        $stmtFee->execute();
-        $feeRow = $stmtFee->get_result()->fetch_assoc();
-        $stmtFee->close();
-
-        if (!$feeRow) {
-            $message = "❌ Program not found.";
-        } else {
-
-            $fee = (float)$feeRow['program_fee'];
-
-            // Use transaction so enrolment + invoice succeed together
-            $conn->begin_transaction();
-
-            try {
-                $stmtEnrol = $conn->prepare("
-                    INSERT INTO Enrolment (enrolment_date, program_id, member_person_id)
-                    VALUES (CURDATE(), ?, ?)
-                ");
-                $stmtEnrol->bind_param("ii", $program_id, $member_person_id);
-                if (!$stmtEnrol->execute()) {
-                    throw new Exception("Enrolment insert failed: " . $stmtEnrol->error);
-                }
-                $enrolment_id = $conn->insert_id;
-                $stmtEnrol->close();
-
-                $stmtInv = $conn->prepare("
-                    INSERT INTO Invoice (invoice_date, invoice_amount, invoice_payment_method, enrolment_id)
-                    VALUES (CURDATE(), ?, ?, ?)
-                ");
-                $stmtInv->bind_param("dsi", $fee, $payment_method, $enrolment_id);
-                if (!$stmtInv->execute()) {
-                    throw new Exception("Invoice insert failed: " . $stmtInv->error);
-                }
-                $stmtInv->close();
-
-                $conn->commit();
-                $message = "✅ Enrolment created and invoice generated.";
-
-            } catch (Exception $e) {
-                $conn->rollback();
-                $message = "❌ " . $e->getMessage();
-            }
-        }
-    }
-}
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Signup / Enrol</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .container { width: 450px; margin: 40px auto; }
-        select, button { width: 100%; padding: 8px; margin-top: 6px; }
-        .msg { padding: 10px; border: 1px solid #ccc; margin: 10px 0; }
-    </style>
-</head>
-<body>
+<div class="container mt-4">
 
-<div class="container">
-    <h1>Signup / Enrol</h1>
+	<h1 class="display-4 mb-4">Enrolment</h1>
 
-    <?php if ($message): ?>
-        <div class="msg"><?php echo htmlspecialchars($message); ?></div>
-    <?php endif; ?>
+	<h2 class="mb-3">Enrol Member</h2>
+	<form method="POST" action="add_enrolment.php">
 
-    <form method="POST">
+		<div class="mb-3">
+			<label for="member_input" class="form-label">Member</label>
+			<input class="form-control" list="datalistOptions" id="member_input" name="member_person_id" placeholder="Type to search member..." required>
+			<datalist id="datalistOptions">
+				<?php
+				$member_query = "SELECT m.person_id, p.person_name FROM Member m JOIN Person p ON p.person_id = m.person_id ORDER BY p.person_name ASC";
+				$member_result = $conn->query($member_query);
 
-        <label>Member *</label>
-        <select name="member_person_id" required>
-            <option value="">-- Select Member --</option>
-            <?php foreach ($members as $m): ?>
-                <option value="<?php echo (int)$m['person_id']; ?>">
-                    <?php echo htmlspecialchars($m['person_name']); ?> (ID: <?php echo (int)$m['person_id']; ?>)
-                </option>
-            <?php endforeach; ?>
-        </select>
+				while ($member = $member_result->fetch_assoc()):
+				?>
+					<option value="<?php echo $member['person_id'] . " - " . $member['person_name'] ?>"><?php echo $member['person_id'] . " - " . $member['person_name'] ?></option>
+				<?php endwhile ?>
+			</datalist>
+		</div>
 
-        <label>Program *</label>
-        <select name="program_id" required>
-            <option value="">-- Select Program --</option>
-            <?php foreach ($programs as $p): ?>
-                <option value="<?php echo (int)$p['program_id']; ?>">
-                    <?php echo htmlspecialchars($p['program_name']); ?>
-                    (RM <?php echo number_format((float)$p['program_fee'], 2); ?>)
-                </option>
-            <?php endforeach; ?>
-        </select>
+		<div class="mb-3">
+			<label for="program_id" class="form-label">Program</label>
+			<select name="program_id" class="form-select" required>
+				<?php
+				$program_query = " SELECT program_id, program_name, program_fee FROM Program ORDER BY program_name ASC";
+				$program_result = $conn->query($program_query);
 
-        <label>Payment Method *</label>
-        <select name="payment_method" required>
-            <option value="">-- Select Payment Method --</option>
-            <option value="Cash">Cash</option>
-            <option value="Card">Card</option>
-            <option value="Online">Online</option>
-        </select>
+				while ($program = $program_result->fetch_assoc()):
+				?>
+					<option value="<?php echo $program['program_id'] ?>"><?php echo $program['program_name'] . " (RM" . $program['program_fee'] . ")" ?></option>
+				<?php endwhile ?>
+			</select>
+		</div>
 
-        <button type="submit" name="submit">Submit Enrolment</button>
-    </form>
+		<div class="mb-3">
+			<label for="payment_method" class="form-label">Payment Method: </label>
+			<select name="payment_method" class="form-select" required>
+				<option value="Cash">Cash</option>
+				<option value="Card">Card</option>
+				<option value="Duitnow">DuitNow</option>
+			</select>
+		</div>
+
+		<button type="submit" name="submit" class="btn btn-primary">Enrol Member</button>
+	</form>
+
+	<h2 class="mb-3">Payment History</h2>
+	<div class="table-responsive">
+		<table class="table table-striped table-hover table-bordered">
+			<thead>
+				<tr>
+					<th>Invoice ID</th>
+					<th>Date</th>
+					<th>Amount (RM)</th>
+					<th>Payment Method</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				$invoice_query = "SELECT * FROM Invoice ORDER BY invoice_date DESC";
+				$result = $conn->query($invoice_query);
+
+				while ($row = mysqli_fetch_assoc($result)):
+				?>
+					<tr>
+						<td><?php echo $row['invoice_id'] ?></td>
+						<td><?php echo $row['invoice_date'] ?></td>
+						<td><?php echo $row['invoice_amount'] ?></td>
+						<td><?php echo $row['invoice_payment_method'] ?></td>
+					</tr>
+				<?php endwhile; ?>
+			</tbody>
+		</table>
+	</div>
+
 </div>
-
-</body>
-</html>
 
 <?php $conn->close(); ?>
