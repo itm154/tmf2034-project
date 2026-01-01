@@ -7,7 +7,7 @@ if (isset($_POST['submit'])) {
 	$class_datetime = $_POST['class_datetime'];
 
 	// Find or create a new trainer-program history entry
-	$history_query = $conn->prepare(file_get_contents('queries/class/get_history_id.sql'));
+	$history_query = $conn->prepare(file_get_contents('queries/class/select_active_history_id.sql'));
 	$history_query->bind_param("ii", $trainer_id, $program_id);
 	$history_query->execute();
 	$result = $history_query->get_result();

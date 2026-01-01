@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 
 		$conn->begin_transaction();
 
-		$query_person = file_get_contents('queries/person/update_person.sql');
+		$query_person = file_get_contents('queries/person/update_person_details.sql');
 		$stmt_person = $conn->prepare($query_person);
 		$stmt_person->bind_param("ssssi", $name, $contact, $dob, $gender, $member_id);
 
@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 $member_info = null;
 if ($member_id) {
 	// Fetch member's info
-	$member_query = file_get_contents('queries/member/view_member_info.sql');
+	$member_query = file_get_contents('queries/member/select_member_details.sql');
 	$stmt = $conn->prepare($member_query);
 	$stmt->bind_param("i", $member_id);
 	$stmt->execute();
@@ -134,7 +134,7 @@ include 'navbar.php';
 				</thead>
 				<tbody>
 					<?php
-					$program_query = file_get_contents('queries/member/member_programs.sql');
+					$program_query = file_get_contents('queries/member/select_member_programs.sql');
 					$stmt = $conn->prepare($program_query);
 					$stmt->bind_param("i", $member_id);
 					$stmt->execute();
@@ -164,7 +164,7 @@ include 'navbar.php';
 				</thead>
 				<tbody>
 					<?php
-					$attendance_query = file_get_contents('queries/member/member_attendance.sql');
+					$attendance_query = file_get_contents('queries/member/select_member_attendance.sql');
 					$stmt = $conn->prepare($attendance_query);
 					$stmt->bind_param("i", $member_id);
 					$stmt->execute();
@@ -195,7 +195,7 @@ include 'navbar.php';
 				</thead>
 				<tbody>
 					<?php
-					$payment_query = file_get_contents('queries/member/member_payment.sql');
+					$payment_query = file_get_contents('queries/member/select_member_payments.sql');
 					$stmt = $conn->prepare($payment_query);
 					$stmt->bind_param("i", $member_id);
 					$stmt->execute();

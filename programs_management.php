@@ -93,7 +93,7 @@ include 'navbar.php';
 			</thead>
 			<tbody>
 				<?php
-				$query = "SELECT p.*, pc.category_name FROM Program p JOIN Program_Category pc ON p.category_id = pc.category_id ORDER BY p.program_name ASC";
+				$query = file_get_contents('queries/program/select_programs_with_category.sql');
 				$result = $conn->query($query);
 
 				while ($row = mysqli_fetch_assoc($result)) {

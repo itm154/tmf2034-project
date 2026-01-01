@@ -59,7 +59,7 @@ include 'navbar.php';
 			<tbody>
 				<?php
 
-				$query = file_get_contents('queries/member/member_info.sql');
+				$query = file_get_contents('queries/member/select_members_info.sql');
 				$result = $conn->query($query);
 				while ($row = mysqli_fetch_assoc($result)) {
 				?>

@@ -42,7 +42,7 @@ $edit = [];
 
 if (isset($_GET['edit'])) {
 	$edit_id = $_GET['edit'];
-	$query = file_get_contents('queries/trainer/edit_trainer_info.sql');
+	$query = file_get_contents('queries/trainer/select_trainer_details.sql');
 	$stmt = $conn->prepare($query);
 	$stmt->bind_param("i", $edit_id);
 	$stmt->execute();
@@ -55,7 +55,7 @@ if (isset($_GET['edit'])) {
 if (isset($_POST['update_trainer'])) {
 	$id = $_POST['id'];
 
-	$query = file_get_contents('queries/person/update_person.sql');
+	$query = file_get_contents('queries/person/update_person_details.sql');
 	$stmt = $conn->prepare($query);
 	$stmt->bind_param("ssssi", $_POST['name'], $_POST['contact'], $_POST['dob'], $_POST['gender'], $id);
 	$stmt->execute();
@@ -68,14 +68,14 @@ if (isset($_POST['update_trainer'])) {
 }
 
 // ================= FETCH TRAINERS =================
-$query = file_get_contents('queries/trainer/trainers_list.sql');
+$query = file_get_contents('queries/trainer/select_trainers_list.sql');
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $trainers = $stmt->get_result();
 $stmt->close();
 
 // ================= TRAINER PERFORMANCE =================
-$query = file_get_contents('queries/trainer/trainer_performance.sql');
+$query = file_get_contents('queries/trainer/select_trainers_performance.sql');
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $performance = $stmt->get_result();

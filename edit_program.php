@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 	$program_duration = $_POST['program_duration'];
 	$program_fee = $_POST['program_fee'];
 
-	$stmt = $conn->prepare("UPDATE Program SET program_name = ?, category_id = ?, program_duration_weeks = ?, program_fee = ? WHERE program_id = ?");
+	$stmt = $conn->prepare(file_get_contents('queries/program/update_program.sql'));
 	$stmt->bind_param("siidi", $program_name, $program_category, $program_duration, $program_fee, $program_id);
 
 	if ($stmt->execute()) {

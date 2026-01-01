@@ -99,7 +99,7 @@ include 'navbar.php';
 				<label for="history" class="form-label">Trainer & Program:</label>
 				<select id="history" name="history_id" class="form-select" required>
 					<?php
-					$combo_query_sql = file_get_contents('queries/class/trainer_program_history.sql');
+					$combo_query_sql = file_get_contents('queries/class/select_active_trainer_program_history.sql');
 					$combo_result = $conn->query($combo_query_sql);
 					if ($combo_result->num_rows > 0) {
 						while ($combo = $combo_result->fetch_assoc()) {

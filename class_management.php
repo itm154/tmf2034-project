@@ -12,7 +12,7 @@ include 'navbar.php';
 			<label for="trainer" class="form-label">Trainer:</label>
 			<select id="trainer" name="trainer_id" class="form-select" required>
 				<?php
-				$trainers_query = file_get_contents('queries/class/trainers.sql');
+				$trainers_query = file_get_contents('queries/trainer/select_all_trainers.sql');
 				$trainers_result = $conn->query($trainers_query);
 				while ($trainer = $trainers_result->fetch_assoc()):
 				?>
@@ -58,7 +58,7 @@ include 'navbar.php';
 			<tbody>
 				<?php
 
-				$query = file_get_contents('queries/class/class_info.sql');
+				$query = file_get_contents('queries/class/select_classes.sql');
 				$result = $conn->query($query);
 				while ($row = mysqli_fetch_assoc($result)) {
 				?>
