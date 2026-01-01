@@ -1,10 +1,15 @@
+<?php
+include "db_connect.php";
+include 'navbar.php';
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
         <title>Dashboard</title>
 </head>
 <body>
-
+    
 <h2>--Quarterly Membership Fees--</h2>
 <?php
 $q1 = $conn->query("
@@ -116,3 +121,5 @@ LIMIT 5;
 
 </body>
 </html>
+
+<?php $conn->close(); ?>

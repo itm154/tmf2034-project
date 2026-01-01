@@ -1,9 +1,19 @@
-<?php
-include "db_connect.php";
-include 'navbar.php';
-?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FitLife Gym System</title>
+</head>
+<body>
 
-<h1>Welcome to FitLife Gym System</h1>
-<p>Please use the navigation bar to access system features.</p>
+<h1>FitLife Gym System</h1>
 
-<?php $conn->close(); ?>
+<ul>
+	<a href="dashboard.php">Dashboard</a>
+	<a href="member_directory.php">Member directory</a>
+	<a href="class_management.php">Class management</a>
+	<a href="signup_enrol.php">Signup/Enrol</a>
+	<a href="trainer_management.php">Trainer management</a>
+</ul>
+
+</body>
+</html>
