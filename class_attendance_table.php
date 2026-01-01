@@ -18,7 +18,7 @@ if ($row_program_id = $result_program_id->fetch_assoc()) {
 	$stmt_enrolled_members->execute();
 	$result_enrolled_members = $stmt_enrolled_members->get_result();
 
-	while ($member = $result_enrolled_members->fetch_assoc()) {
+	while ($member = $result_enrolled_members->fetch_assoc()):
 		// Check for attendance record
 		$query_attendance = "SELECT attendance_status FROM Attendance WHERE person_id = ? AND class_id = ?";
 		$stmt_attendance = $conn->prepare($query_attendance);
@@ -51,7 +51,7 @@ if ($row_program_id = $result_program_id->fetch_assoc()) {
 				</select>
 			</td>
 		</tr>
-<?php }
+<?php endwhile;
 	$stmt_enrolled_members->close();
 }
 $stmt_program_id->close();

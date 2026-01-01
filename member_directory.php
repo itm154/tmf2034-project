@@ -61,7 +61,7 @@ include 'navbar.php';
 
 				$query = file_get_contents('queries/member/select_members_info.sql');
 				$result = $conn->query($query);
-				while ($row = mysqli_fetch_assoc($result)) {
+				while ($row = mysqli_fetch_assoc($result)):
 				?>
 					<tr>
 						<td>
@@ -86,7 +86,7 @@ include 'navbar.php';
 							</div>
 						</td>
 					</tr>
-				<?php } ?>
+				<?php endwhile; ?>
 			</tbody>
 		</table>
 	</div>

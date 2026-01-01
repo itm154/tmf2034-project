@@ -72,7 +72,7 @@ include 'navbar.php';
 	<?php endif; ?>
 
 
-	<?php if ($member_info) { ?>
+	<?php if ($member_info): ?>
 		<form action="<?php echo $_SERVER["PHP_SELF"]; ?>?member_id=<?php echo $member_id; ?>" method="post">
 			<input type="hidden" name="member_id" value="<?php echo $member_id; ?>">
 
@@ -139,14 +139,14 @@ include 'navbar.php';
 					$stmt->bind_param("i", $member_id);
 					$stmt->execute();
 					$result = $stmt->get_result();
-					while ($row = $result->fetch_assoc()) {
+					while ($row = $result->fetch_assoc()):
 					?>
 						<tr>
 							<td><?php echo $row['program_name']; ?></td>
 							<td><?php echo $row['category_name']; ?></td>
 							<td><?php echo $row['enrolment_date']; ?></td>
 						</tr>
-					<?php }
+					<?php endwhile;
 					$stmt->close(); ?>
 				</tbody>
 			</table>
@@ -169,14 +169,14 @@ include 'navbar.php';
 					$stmt->bind_param("i", $member_id);
 					$stmt->execute();
 					$result = $stmt->get_result();
-					while ($row = $result->fetch_assoc()) {
+					while ($row = $result->fetch_assoc()):
 					?>
 						<tr>
 							<td><?php echo $row['program_name']; ?></td>
 							<td><?php echo $row['class_datetime']; ?></td>
 							<td><?php echo $row['attendance_status']; ?></td>
 						</tr>
-					<?php }
+					<?php endwhile;
 					$stmt->close(); ?>
 				</tbody>
 			</table>
@@ -200,7 +200,7 @@ include 'navbar.php';
 					$stmt->bind_param("i", $member_id);
 					$stmt->execute();
 					$result = $stmt->get_result();
-					while ($row = $result->fetch_assoc()) {
+					while ($row = $result->fetch_assoc()):
 					?>
 						<tr>
 							<td><?php echo $row['program_name']; ?></td>
@@ -208,13 +208,13 @@ include 'navbar.php';
 							<td><?php echo $row['invoice_amount']; ?></td>
 							<td><?php echo $row['invoice_payment_method']; ?></td>
 						</tr>
-					<?php }
+					<?php endwhile;
 					$stmt->close(); ?>
 				</tbody>
 			</table>
 		</div>
 
-		<?php } else {
+		<?php else:
 		if (isset($_REQUEST['member_id'])):  ?>
 			<div class="alert alert-danger">
 				Member not found
@@ -224,7 +224,7 @@ include 'navbar.php';
 				Member ID not specified
 			</div>
 	<?php endif;
-	} ?>
+	endif; ?>
 
 </div>
 

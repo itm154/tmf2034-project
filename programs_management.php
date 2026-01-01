@@ -30,7 +30,7 @@ include 'navbar.php';
 				$query = "SELECT * FROM Program_Category ORDER BY category_name ASC";
 				$result = $conn->query($query);
 
-				while ($row = mysqli_fetch_assoc($result)) {
+				while ($row = mysqli_fetch_assoc($result)):
 				?>
 					<tr>
 						<td><?php echo $row['category_name'] ?></td>
@@ -41,7 +41,7 @@ include 'navbar.php';
 							</div>
 						</td>
 					</tr>
-				<?php } ?>
+				<?php endwhile; ?>
 			</tbody>
 		</table>
 	</div>
@@ -59,10 +59,10 @@ include 'navbar.php';
 				<?php
 				$query = "SELECT * from Program_Category ORDER BY category_name ASC";
 				$result = $conn->query($query);
-				while ($row = mysqli_fetch_assoc($result)) {
+				while ($row = mysqli_fetch_assoc($result)):
 				?>
 					<option value=<?php echo $row['category_id'] ?>><?php echo $row['category_name'] ?></option>
-				<?php } ?>
+				<?php endwhile; ?>
 			</select>
 		</div>
 
@@ -96,7 +96,7 @@ include 'navbar.php';
 				$query = file_get_contents('queries/program/select_programs_with_category.sql');
 				$result = $conn->query($query);
 
-				while ($row = mysqli_fetch_assoc($result)) {
+				while ($row = mysqli_fetch_assoc($result)):
 				?>
 					<tr>
 						<td><?php echo $row['program_name'] ?></td>
@@ -110,7 +110,7 @@ include 'navbar.php';
 							</div>
 						</td>
 					</tr>
-				<?php } ?>
+				<?php endwhile; ?>
 			</tbody>
 		</table>
 	</div>

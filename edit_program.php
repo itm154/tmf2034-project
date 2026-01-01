@@ -60,11 +60,11 @@ include 'navbar.php';
 					<?php
 					$cat_query = "SELECT * from Program_Category ORDER BY category_name ASC";
 					$cat_result = $conn->query($cat_query);
-					while ($row = mysqli_fetch_assoc($cat_result)) {
+					while ($row = mysqli_fetch_assoc($cat_result)):
 						$selected = ($program['category_id'] == $row['category_id']) ? "selected" : "";
 					?>
 						<option value="<?php echo $row['category_id'] ?>" <?php echo $selected ?>><?php echo $row['category_name'] ?></option>
-					<?php } ?>
+					<?php endwhile; ?>
 				</select>
 			</div>
 
