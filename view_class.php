@@ -121,7 +121,7 @@ include 'navbar.php';
 			<div class="mb-3">
 				<label for="status" class="form-label">Class Status:</label>
 				<select id="status" name="class_status" class="form-select" required>
-					<option value="Active" <?php if ($class_info['class_status'] == 'Active') echo 'selected'; ?>>Scheduled</option>
+					<option value="Active" <?php if ($class_info['class_status'] == 'Active') echo 'selected'; ?>>Active</option>
 					<option value="Completed" <?php if ($class_info['class_status'] == 'Completed') echo 'selected'; ?>>Completed</option>
 					<option value="Cancelled" <?php if ($class_info['class_status'] == 'Cancelled') echo 'selected'; ?>>Cancelled</option>
 				</select>
