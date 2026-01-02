@@ -1,5 +1,6 @@
 <html lang="en" data-bs-theme="dark">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <nav class="navbar navbar-expand-lg border-bottom">
 	<div class="container-fluid">
@@ -13,19 +14,22 @@
 					<a class="nav-link" href="index.php">Dashboard</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="member_directory.php">Member directory</a>
+					<a class="nav-link" href="member_directory.php">Member Directory</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="class_management.php">Class management</a>
+					<a class="nav-link" href="signup_enrol.php">Enrol Member</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="signup_enrol.php">Signup/Enrol</a>
+					<a class="nav-link" href="programs_management.php">Programs Management</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="trainer_management.php">Trainer management</a>
+					<a class="nav-link" href="class_management.php">Class Management</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="programs_management.php">Programs management</a>
+					<a class="nav-link" href="trainer_management.php">Trainer Management</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="notification_management.php">Notification Management</a>
 				</li>
 			</ul>
 		</div>

@@ -23,10 +23,10 @@ if (isset($_POST['submit'])) {
 			header("Location: member_directory.php");
 			exit();
 		} else {
-			echo "<script>alert('Error adding member: " . $conn->error . "');</script>";
+			echo "<script>alert('Error adding member: " . $conn->error . "'); window.history.back();</script>";
 		}
 	} else {
-		echo "<script>alert('Error adding person: " . $conn->error . "');</script>";
+		echo "<script>alert('Error adding person: " . $conn->error . "'); window.history.back();</script>";
 	}
 }
 

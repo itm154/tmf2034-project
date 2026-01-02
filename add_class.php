@@ -23,7 +23,7 @@ if (isset($_POST['submit'])) {
 		if ($history_insert_query->execute()) {
 			$history_id = $conn->insert_id;
 		} else {
-			echo "<script>alert('Error creating trainer-program history: " . $conn->error . "');</script>";
+			echo "<script>alert('Error creating trainer-program history: " . $conn->error . "'); window.history.back();</script>";
 			exit();
 		}
 	}
@@ -37,10 +37,10 @@ if (isset($_POST['submit'])) {
 			header("Location: class_management.php");
 			exit();
 		} else {
-			echo "<script>alert('Error adding class: " . $conn->error . "');</script>";
+			echo "<script>alert('Error adding class: " . $conn->error . "'); window.history.back();</script>";
 		}
 	} else {
-		echo "<script>alert('Could not find or create a trainer program history link.');</script>";
+		echo "<script>alert('Could not find or create a trainer program history.'); window.history.back();</script>";
 	}
 }
 

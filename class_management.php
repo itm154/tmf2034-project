@@ -79,7 +79,7 @@ include 'navbar.php';
 							<?php echo $row['class_datetime'] ?>
 						</td>
 						<td>
-							<div class="d-flex gap-2">
+							<div class="btn-group" role="group">
 								<a href="view_class.php?class_id=<?php echo $row['class_id'] ?>" class="btn btn-info btn-sm">View</a>
 								<a href="delete_class.php?class_id=<?php echo $row['class_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this class?');">Delete</a>
 							</div>
