@@ -1,117 +1,117 @@
--- DUMMY DATA SCRIPT
-
--- Person (15 records)
+-- Person
 INSERT INTO Person (person_id, person_name, person_contact, person_dob, person_gender) VALUES
-(1, 'John Doe', 'john.doe@example.com', '1990-05-15', 'Male'),
-(2, 'Jane Smith', 'jane.smith@example.com', '1988-09-20', 'Female'),
-(3, 'Peter Jones', 'peter.jones@example.com', '1995-02-10', 'Male'),
-(4, 'Mary Williams', 'mary.w@example.com', '2000-11-30', 'Female'),
-(5, 'David Brown', 'd.brown@example.com', '1985-07-22', 'Male'),
-(6, 'Patricia Garcia', 'patty.g@example.com', '1992-04-18', 'Female'),
-(7, 'Michael Miller', 'mike.m@example.com', '1998-01-05', 'Male'),
-(8, 'Linda Davis', 'l.davis@example.com', '1989-08-12', 'Female'),
-(9, 'Robert Wilson', 'robert.w@example.com', '1993-06-25', 'Male'),
-(10, 'Jennifer Moore', 'jen.moore@example.com', '1996-03-03', 'Female'),
-(11, 'Charles White', 'charles.w@example.com', '1991-12-01', 'Male'),
-(12, 'Susan Harris', 'susan.h@example.com', '1994-10-11', 'Female'),
-(13, 'Joseph Clark', 'joseph.c@example.com', '1987-04-02', 'Male'),
-(14, 'Karen Lewis', 'karen.l@example.com', '1999-08-28', 'Female'),
-(15, 'Daniel Walker', 'dan.w@example.com', '1997-05-19', 'Male');
+(1, 'Jordan', 'jwalter@gmail.com', '2005-01-01', 'Male'),
+(2, 'Ashrul', 'ashrul@gmail.com', '2005-02-02', 'Male'),
+(3, 'Ariel', 'ariel@gmail.com', '2005-03-03', 'Male'),
+(4, 'Jiani', 'jiani@gmail.com', '2005-04-04', 'Female'),
+(5, 'Angelina', 'angelina@gmail.com', '2005-05-05', 'Female'),
+(6, 'John Doe', 'john@gmail.com', '2000-01-01', 'Male'),
+(7, 'Jane Doe', 'jane@gmail.com', '2000-02-02', 'Female'),
+(8, 'Ahmad', 'ahmad@gmail.com', '2000-02-02', 'Male'),
+(9, 'Ali', 'ali@gmail.com', '2000-04-04', 'Male'),
+(10, 'Amanda', 'aman@gmail.com', '2000-05-05', 'Female');
 
+-- NOTE: This is already inserted in the schema file
 -- Membership_Type
-INSERT INTO Membership_Type (type_name, monthly_fee) VALUES
-('Basic', 50.00),
-('Premium', 80.00),
-('Gold', 120.00);
-
--- Member (8 members)
-INSERT INTO Member (person_id, membership_type_id, membership_status, membership_start_date) VALUES
-(1, 1, 'Active', '2023-01-15'),
-(2, 2, 'Active', '2022-11-20'),
-(3, 1, 'Inactive', '2023-05-10'),
-(4, 3, 'Suspended', '2023-02-01'),
-(8, 2, 'Active', '2023-04-01'),
-(9, 1, 'Active', '2023-08-11'),
-(11, 3, 'Active', '2023-09-01'),
-(12, 2, 'Inactive', '2023-07-20');
-
--- Trainer (5 trainers)
-INSERT INTO Trainer (person_id, trainer_specialization, trainer_cert_lvl) VALUES
-(5, 'Weightlifting', 'Certified Master Trainer'),
-(6, 'Yoga', 'RYT 500'),
-(7, 'Cardio & HIIT', 'ACE Certified'),
-(10, 'Pilates', 'Stott Pilates Certified'),
-(13, 'CrossFit', 'CrossFit Level 2');
+-- INSERT INTO Membership_Type (membership_type_id, type_name, monthly_fee) VALUES
+-- (1, 'Basic', 50.00),
+-- (2, 'Premium', 80.00),
+-- (3, 'Gold', 120.00);
 
 -- Program_Category
-INSERT INTO Program_Category (category_name) VALUES
-('Strength Training'),
-('Cardiovascular'),
-('Mind & Body'),
-('Functional Fitness');
+INSERT INTO Program_Category (category_id, category_name) VALUES
+(4, 'Bodybuilding'),
+(2, 'Cardio'),
+(3, 'Crossfit'),
+(1, 'Rhythmic Excercise');
 
--- Program (6 programs)
-INSERT INTO Program (program_name, program_duration_weeks, program_fee, category_id) VALUES
-('Beginner Strength', 8, 200.00, 1),
-('Advanced Weightlifting', 12, 350.00, 1),
-('Yoga Flow', 6, 150.00, 3),
-('HIIT Blast', 4, 100.00, 2),
-('CrossFit Intro', 10, 300.00, 4),
-('Mat Pilates', 6, 180.00, 3);
+-- Notification
+INSERT INTO Notification (notification_id, notification_content, notification_datetime) VALUES
+(1, 'test notification 1', '2026-01-02 06:15:48'),
+(2, 'test notification 2', '2026-01-02 06:15:53'),
+(3, 'The gym will undergo maintenance on 4th January 2026', '2026-01-02 06:16:20'),
+(4, 'Members with high class attendance will be given a reward!', '2026-01-02 06:16:48');
 
+-- Member
+INSERT INTO Member (person_id, membership_type_id, membership_status, membership_start_date) VALUES
+(1, 3, 'Active', '2026-01-02'),
+(2, 2, 'Active', '2026-01-02'),
+(3, 3, 'Active', '2026-01-02'),
+(4, 1, 'Active', '2026-01-02'),
+(5, 3, 'Active', '2026-01-02');
+
+-- Trainer
+INSERT INTO Trainer (person_id, trainer_specialization, trainer_cert_lvl) VALUES
+(6, 'Yoga', 'Certified Yoga Instructor'),
+(7, 'Cardio', 'Level 2'),
+(8, 'Weightlifting', 'National Level Weightlifter'),
+(9, 'Pilates', 'Certified Pilater Trainer'),
+(10, 'Crossfit', 'Level 3');
+
+-- Program
+INSERT INTO Program (program_id, program_name, program_duration_weeks, program_fee, category_id) VALUES
+(1, 'Beginner Weightlifting', 1, 50.00, 4),
+(2, 'Quick Everyday Cardio', 2, 100.00, 2),
+(3, 'Zumba', 3, 30.00, 1);
 
 -- Trainer_Program_History
-INSERT INTO Trainer_Program_History (trainer_person_id, program_id, start_date, end_date) VALUES
-(5, 2, '2023-01-01', NULL),        -- History ID 1
-(7, 4, '2023-02-01', '2023-08-01'),-- History ID 2
-(6, 3, '2023-03-01', NULL),        -- History ID 3
-(5, 1, '2023-09-01', NULL),        -- History ID 4
-(13, 5, '2023-05-01', NULL),       -- History ID 5
-(10, 6, '2023-06-01', NULL),       -- History ID 6
-(7, 4, '2023-10-01', NULL);       -- History ID 7
+INSERT INTO Trainer_Program_History (history_id, trainer_person_id, program_id, start_date, end_date) VALUES
+(1, 8, 1, '2026-01-02', NULL),
+(2, 7, 2, '2026-01-02', NULL),
+(3, 10, 2, '2026-01-02', NULL),
+(4, 6, 3, '2026-01-02', NULL);
 
--- Enrolment (6 enrolments)
-INSERT INTO Enrolment (enrolment_date, program_id, member_person_id) VALUES
-('2023-09-05', 1, 1), -- John
-('2023-03-10', 3, 2), -- Jane
-('2023-05-15', 5, 8), -- Linda
-('2023-06-20', 6, 9), -- Robert
-('2023-10-05', 4, 11),-- Charles
-('2023-01-10', 2, 1); -- John
+-- Enrolment
+INSERT INTO Enrolment (enrolment_id, enrolment_date, program_id, member_person_id) VALUES
+(1, '2026-01-02', 1, 3),
+(2, '2026-01-02', 1, 2),
+(3, '2026-01-02', 3, 1),
+(4, '2026-01-02', 2, 5),
+(5, '2026-01-02', 2, 4),
+(7, '2026-01-02', 2, 2),
+(8, '2026-01-02', 1, 1);
 
--- Invoice (Updated to match schema column name: invoice_payment_method)
-INSERT INTO Invoice (invoice_date, invoice_amount, invoice_payment_method, enrolment_id) VALUES
-('2023-09-05', 200.00, 'Card', 1),
-('2023-03-10', 150.00, 'DuitNow', 2),
-('2023-05-15', 300.00, 'Cash', 3),
-('2023-06-20', 180.00, 'Card', 4),
-('2023-10-05', 100.00, 'DuitNow', 5),
-('2023-01-10', 350.00, 'Card', 6);
+-- Invoice
+INSERT INTO Invoice (invoice_id, invoice_date, invoice_amount, invoice_payment_method, enrolment_id) VALUES
+(1, '2026-01-02', 50.00, 'Card', 1),
+(2, '2026-01-02', 50.00, 'Cash', 2),
+(3, '2026-01-02', 30.00, 'Duitnow', 3),
+(4, '2026-01-02', 100.00, 'Duitnow', 4),
+(5, '2026-01-02', 100.00, 'Card', 5),
+(7, '2026-01-02', 100.00, 'Card', 7),
+(8, '2026-01-02', 50.00, 'Card', 8);
 
--- Class (Updated with class_status)
-INSERT INTO Class (class_datetime, history_id, class_status) VALUES
-('2023-09-12 18:00:00', 4, 'Completed'),
-('2023-09-19 18:00:00', 4, 'Completed'),
-('2023-03-15 19:30:00', 3, 'Completed'),
-('2023-03-22 19:30:00', 3, 'Completed'),
-('2023-05-20 09:00:00', 5, 'Completed'),
-('2023-05-27 09:00:00', 5, 'Completed'),
-('2023-06-25 17:00:00', 6, 'Completed'),
-('2023-07-02 17:00:00', 6, 'Completed'),
-('2023-10-10 18:30:00', 7, 'Completed'),
-('2023-10-17 18:30:00', 7, 'Cancelled'), -- One cancelled class for performance reports
-('2023-01-15 20:00:00', 1, 'Completed'),
-('2023-01-22 20:00:00', 1, 'Active');    -- One active class for scheduling
+-- Class
+INSERT INTO Class (class_id, class_datetime, class_status, history_id) VALUES
+(1, '2026-01-04 12:00:00', 'Active', 1),
+(2, '2026-01-05 12:00:00', 'Active', 1),
+(3, '2026-01-06 12:00:00', 'Active', 1),
+(4, '2026-01-04 08:00:00', 'Active', 2),
+(5, '2026-01-05 08:00:00', 'Active', 2),
+(6, '2026-01-07 08:00:00', 'Active', 3),
+(7, '2026-01-12 10:00:00', 'Active', 4),
+(8, '2026-01-13 10:30:00', 'Active', 4),
+(9, '2026-01-07 12:00:00', 'Cancelled', 1);
 
 -- Attendance
-INSERT INTO Attendance (person_id, class_id, attendance_status) VALUES
-(1, 1, 'Attended'),
-(1, 2, 'Absent'),
-(1, 11, 'Attended'),
-(2, 3, 'Attended'),
-(2, 4, 'Attended'),
-(8, 5, 'Attended'),
-(8, 6, 'Attended'),
-(9, 7, 'Absent'),
-(9, 8, 'Attended'),
-(11, 9, 'Attended');
+INSERT INTO Attendance (attendance_id, person_id, class_id, attendance_status) VALUES
+(1, 1, 8, 'Attended'),
+(2, 1, 7, 'Attended'),
+(3, 5, 6, 'Attended'),
+(4, 4, 6, 'Attended'),
+(5, 3, 3, 'Attended'),
+(7, 2, 3, 'Absent'),
+(8, 2, 6, 'Attended'),
+(9, 3, 2, 'Absent'),
+(10, 2, 2, 'Absent'),
+(11, 1, 2, 'Absent'),
+(12, 3, 1, 'Absent'),
+(13, 2, 1, 'Absent'),
+(14, 1, 1, 'Absent'),
+(15, 5, 4, 'Absent'),
+(16, 4, 4, 'Attended'),
+(17, 2, 4, 'Absent'),
+(18, 1, 3, 'Absent'),
+(19, 3, 9, 'Absent'),
+(20, 2, 9, 'Absent'),
+(21, 1, 9, 'Absent');
