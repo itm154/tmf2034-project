@@ -11,7 +11,7 @@ if (isset($_POST['submit'])) {
 		header("Location: programs_management.php");
 		exit;
 	} else {
-		echo "<script>alert('Error adding category: " . $conn->error . "');</script>";
+		echo "<script>alert('Error adding category: " . $conn->error . "'); window.history.back();</script>";
 	}
 }
 

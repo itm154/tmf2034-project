@@ -8,7 +8,7 @@ if (isset($_POST['submit'])) {
 	$payment_method = $_POST['payment_method'];
 
 	if ($member_person_id <= 0 || $program_id <= 0 || $payment_method === "") {
-		echo "<script>alert('Please select a Member, Program, and Payment Method.'); window.history.back();</script>";
+		echo "<script> alert('Please select a Member, Program, and Payment Method.'); window.history.back(); </script>";
 		exit();
 	}
 
@@ -20,7 +20,7 @@ if (isset($_POST['submit'])) {
 	$stmt_fee->close();
 
 	if (!$fee_row) {
-		echo "<script>alert('Program not found.'); window.history.back();</script>";
+		echo "<script> alert('Program not found.'); window.history.back(); </script>";
 		exit();
 	}
 
@@ -38,13 +38,13 @@ if (isset($_POST['submit'])) {
 
 		if ($stmt_inv->execute()) {
 			$stmt_inv->close();
-			echo "<script>alert('Enrolment created and invoice generated.'); window.location.href = 'signup_enrol.php';</script>";
+			echo "<script> alert('Enrolment created and invoice generated.'); window.location.href = 'signup_enrol.php'; </script>";
 			exit();
 		} else {
-			echo "<script>alert('Invoice creation failed: " . $conn->error . "'); window.history.back();</script>";
+			echo "<script> alert('Invoice creation failed: " . $conn->error . "'); window.history.back(); </script>";
 		}
 	} else {
-		echo "<script>alert('Enrolment failed: " . $conn->error . "'); window.history.back();</script>";
+		echo "<script> alert('Enrolment failed: " . $conn->error . "'); window.history.back(); </script>";
 	}
 }
 

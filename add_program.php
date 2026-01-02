@@ -14,7 +14,7 @@ if (isset($_POST['submit'])) {
 		header("Location: programs_management.php");
 		exit;
 	} else {
-		echo "<script>alert('Error adding program: " . $conn->error . "');</script>";
+		echo "<script>alert('Error adding program: " . $conn->error . "'); window.history.back();</script>";
 	}
 }
 
