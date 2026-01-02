@@ -16,6 +16,10 @@ CREATE TABLE Membership_Type (
 	PRIMARY KEY(membership_type_id)
 );
 
+INSERT INTO Membership_Type (type_name, monthly_fee) VALUES
+('Basic', 50.00),
+('Premium', 80.00),
+('Gold', 120.00);
 
 CREATE TABLE Member (
 	person_id INTEGER,
