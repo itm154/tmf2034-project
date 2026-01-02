@@ -8,6 +8,19 @@ include 'db_connect.php';
 	<h1 class="display-4 mb-4">Dashboard</h1>
 
 	<?php
+	$notification_query = file_get_contents('queries/dashboard/select_latest_notifications.sql');
+	$notifications = $conn->query($notification_query);
+	while ($notification = $notifications->fetch_assoc()):
+	?>
+		<div class="alert alert-info" role="alert">
+			<div class="d-flex justify-content-between align-items-center">
+				<div><i class="bi bi-info-circle-fill me-2"></i><?php echo $notification['notification_content'] ?></div>
+				<small class="text-muted"><?php echo $notification['notification_datetime'] ?></small>
+			</div>
+		</div>
+	<?php endwhile; ?>
+
+	<?php
 	$attendance_analytics_query = file_get_contents('queries/dashboard/select_attendance_analytics.sql');
 	$attendance_analytics = $conn->query($attendance_analytics_query);
 	?>
@@ -110,8 +123,6 @@ include 'db_connect.php';
 			</table>
 		</div>
 	</div>
-
-
 </div>
 
 <?php $conn->close(); ?>

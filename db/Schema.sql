@@ -114,7 +114,7 @@ CREATE TABLE Attendance (
 CREATE TABLE Notification (
     notification_id INTEGER AUTO_INCREMENT,
     notification_content TEXT NOT NULL,
-    notification_date DATETIME NOT NULL,
+    notification_datetime DATETIME NOT NULL,
     PRIMARY KEY(notification_id)
 );
 
