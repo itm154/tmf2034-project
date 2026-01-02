@@ -12,6 +12,19 @@ if (isset($_POST['submit'])) {
 		exit();
 	}
 
+	// Check if the member is already enrolled in the program
+	$stmt_check = $conn->prepare("SELECT enrolment_id FROM Enrolment WHERE member_person_id = ? AND program_id = ?");
+	$stmt_check->bind_param("ii", $member_person_id, $program_id);
+	$stmt_check->execute();
+	$stmt_check->store_result();
+
+	if ($stmt_check->num_rows > 0) {
+		$stmt_check->close();
+		echo "<script> alert('This member is already enrolled in this program.'); window.history.back(); </script>";
+		exit();
+	}
+	$stmt_check->close();
+
 	$stmt_fee = $conn->prepare("SELECT program_fee FROM Program WHERE program_id = ?");
 	$stmt_fee->bind_param("i", $program_id);
 	$stmt_fee->execute();
