@@ -80,7 +80,7 @@ include 'navbar.php';
 							<?php echo $row['program_count'] ?>
 						</td>
 						<td>
-							<div class="d-flex gap-2">
+							<div class="btn-group" role="group">
 								<a href="view_member.php?member_id=<?php echo $row['person_id'] ?>" class="btn btn-info btn-sm">View</a>
 								<a href="delete_member.php?member_id=<?php echo $row['person_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this member?');">Delete</a>
 							</div>

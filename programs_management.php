@@ -35,7 +35,7 @@ include 'navbar.php';
 					<tr>
 						<td><?php echo $row['category_name'] ?></td>
 						<td>
-							<div class="d-flex gap-2">
+							<div class="btn-group" role="group">
 								<a href="edit_category.php?id=<?php echo $row['category_id'] ?>" class="btn btn-info btn-sm">Edit</a>
 								<a href="delete_category.php?id=<?php echo $row['category_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?')">Delete</a>
 							</div>
@@ -104,7 +104,7 @@ include 'navbar.php';
 						<td><?php echo $row['program_fee'] ?></td>
 						<td><?php echo $row['category_name'] ?></td>
 						<td>
-							<div class="d-flex gap-2">
+							<div class="btn-group" role="group">
 								<a href="edit_program.php?id=<?php echo $row['program_id'] ?>" class="btn btn-info btn-sm">Edit</a>
 								<a href="delete_program.php?id=<?php echo $row['program_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this program?')">Delete</a>
 							</div>

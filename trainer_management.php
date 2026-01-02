@@ -131,7 +131,7 @@ $performance_stmt->close();
 				value="<?php echo $edit_data['trainer_cert_lvl'] ?? ''; ?>">
 		</div>
 
-		<div class="d-flex gap-2">
+		<div class="btn-group" role="group">
 			<?php if ($edit_id): ?>
 				<button type="submit" name="update_trainer" class="btn btn-primary">Update Trainer</button>
 				<a href="trainer_management.php" class="btn btn-secondary">Cancel</a>
@@ -164,7 +164,7 @@ $performance_stmt->close();
 						<td><?php echo $trainer['trainer_specialization']; ?></td>
 						<td><?php echo $trainer['trainer_cert_lvl']; ?></td>
 						<td>
-							<div class="d-flex gap-2">
+							<div class="btn-group" role="group">
 								<a href="?edit=<?php echo $trainer['person_id']; ?>" class="btn btn-info btn-sm">Edit</a>
 								<a href="?delete=<?php echo $trainer['person_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete trainer?')">Delete</a>
 							</div>
