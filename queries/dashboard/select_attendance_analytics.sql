@@ -25,4 +25,4 @@ JOIN Member m
 JOIN Person p
     ON m.person_id = p.person_id
 GROUP BY p.person_name
-ORDER BY attendance_percentage, person_name DESC;
+ORDER BY attendance_percentage DESC;
