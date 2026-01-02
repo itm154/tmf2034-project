@@ -111,6 +111,13 @@ CREATE TABLE Attendance (
 		UNIQUE (person_id, class_id)
 );
 
+CREATE TABLE Notification (
+    notification_id INTEGER AUTO_INCREMENT,
+    notification_content TEXT NOT NULL,
+    notification_date DATETIME NOT NULL,
+    PRIMARY KEY(notification_id)
+);
+
 
 CREATE INDEX idx_class_datetime
 ON Class (class_datetime);
