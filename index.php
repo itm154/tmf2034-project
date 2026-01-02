@@ -11,17 +11,35 @@ $quarterly_fees = $conn->query($quarterly_fee_query);
 <div class="container mt-4">
 	<h1 class="display-4 mb-4">Dashboard</h1>
 
-	<div class="row mb-4">
-		<div class="col-md-6">
-			<div class="alert alert-success" role="alert">
-				20% off on all YOGA classes this month!
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="alert alert-info" role="alert">
-				HIIT class COMING SOON!
-			</div>
-		</div>	
+	<?php
+	$attendance_analytics_query = file_get_contents('queries/dashboard/select_attendance_analytics.sql');
+	$attendance_analytics = $conn->query($attendance_analytics_query);
+	?>
+
+	<h2 class="mb-3">Attendance Analytics</h2>
+	<div class="table-responsive">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>Member</th>
+					<th>Attended Class/Total Class</th>
+					<th>Attendance %</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php while ($row = $attendance_analytics->fetch_assoc()): ?>
+					<tr>
+						<td><?php echo $row['member_name'] ?></td>
+						<td><?php echo $row['attended_classes'] . "/" . $row['total_classes'] ?></td>
+						<td>
+							<div class="progress" role="progressbar">
+								<div class="progress-bar progress-bar-striped progress-bar-animated" style="width: <?php echo $row['attendance_percentage'] ?>%"><?php echo $row['attendance_percentage'] ?>%</div>
+							</div>
+						</td>
+					</tr>
+				<?php endwhile; ?>
+			</tbody>
+		</table>
 	</div>
 
 	<?php

@@ -13,22 +13,23 @@
 					<a class="nav-link" href="index.php">Dashboard</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="member_directory.php">Member directory</a>
+					<a class="nav-link" href="member_directory.php">Member Directory</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="class_management.php">Class management</a>
+					<a class="nav-link" href="signup_enrol.php">Enrol Member</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="signup_enrol.php">Signup/Enrol</a>
+					<a class="nav-link" href="programs_management.php">Programs Management</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="trainer_management.php">Trainer management</a>
+					<a class="nav-link" href="class_management.php">Class Management</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="programs_management.php">Programs management</a>
+					<a class="nav-link" href="trainer_management.php">Trainer Management</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="attendance_analytics.php">Attendance analytics</a>
+					<a class="nav-link" href="notification_management.php">Notification Management</a>
+				</li>
 			</ul>
 		</div>
 	</div>
