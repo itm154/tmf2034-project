@@ -64,21 +64,11 @@ include 'navbar.php';
 				while ($row = mysqli_fetch_assoc($result)):
 				?>
 					<tr>
-						<td>
-							<?php echo $row['person_id'] ?>
-						</td>
-						<td>
-							<?php echo $row['person_name'] ?>
-						</td>
-						<td>
-							<?php echo $row['type_name'] ?>
-						</td>
-						<td>
-							<?php echo $row['membership_status'] ?>
-						</td>
-						<td>
-							<?php echo $row['program_count'] ?>
-						</td>
+						<td> <?php echo $row['person_id'] ?> </td>
+						<td> <?php echo $row['person_name'] ?> </td>
+						<td> <?php echo $row['type_name'] ?> </td>
+						<td> <?php echo $row['membership_status'] ?> </td>
+						<td> <?php echo $row['program_count'] ?> </td>
 						<td>
 							<div class="btn-group" role="group">
 								<a href="view_member.php?member_id=<?php echo $row['person_id'] ?>" class="btn btn-info btn-sm">View</a>

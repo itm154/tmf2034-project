@@ -17,6 +17,9 @@
 					<a class="nav-link" href="member_directory.php">Member Directory</a>
 				</li>
 				<li class="nav-item">
+					<a class="nav-link" href="trainer_directory.php">Trainer Directory</a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-link" href="signup_enrol.php">Enrol Member</a>
 				</li>
 				<li class="nav-item">
@@ -24,9 +27,6 @@
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="class_management.php">Class Management</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="trainer_management.php">Trainer Management</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="notification_management.php">Notification Management</a>
