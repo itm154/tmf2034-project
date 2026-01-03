@@ -6,6 +6,51 @@ if (isset($_REQUEST['trainer_id'])) {
 	$trainer_id = $_REQUEST['trainer_id'];
 }
 
+// Handle End Program History
+if (isset($_GET['history_id'])) {
+	$history_id = $_GET['history_id'];
+	$end_date = date('Y-m-d');
+
+	$end_stmt = $conn->prepare("UPDATE Trainer_Program_History SET end_date = ? WHERE history_id = ?");
+	$end_stmt->bind_param("si", $end_date, $history_id);
+	if ($end_stmt->execute()) {
+		header("Location: view_trainer.php?trainer_id=" . $trainer_id);
+		exit();
+	} else {
+		$error_message = "Error ending program assignment: " . $conn->error;
+	}
+	$end_stmt->close();
+}
+
+// Handle Add Program History
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_program_history'])) {
+	if (isset($_POST['program_id'])) {
+		$program_id = $_POST['program_id'];
+		$start_date = date('Y-m-d');
+
+		// Check if the trainer is already assigned to the program and is still active
+		$check_stmt = $conn->prepare("SELECT * FROM Trainer_Program_History WHERE trainer_person_id = ? AND program_id = ? AND end_date IS NULL");
+		$check_stmt->bind_param("ii", $trainer_id, $program_id);
+		$check_stmt->execute();
+		$check_result = $check_stmt->get_result();
+
+		if ($check_result->num_rows > 0) {
+			$error_message = "This trainer is already actively assigned to this program.";
+		} else {
+			$add_stmt = $conn->prepare("INSERT INTO Trainer_Program_History (trainer_person_id, program_id, start_date) VALUES (?, ?, ?)");
+			$add_stmt->bind_param("iis", $trainer_id, $program_id, $start_date);
+			if ($add_stmt->execute()) {
+				header("Location: view_trainer.php?trainer_id=" . $trainer_id);
+				exit();
+			} else {
+				$error_message = "Error assigning program: " . $conn->error;
+			}
+			$add_stmt->close();
+		}
+		$check_stmt->close();
+	}
+}
+
 // Handle self form submission for updates
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 
@@ -73,22 +118,22 @@ include 'navbar.php';
 
 
 	<?php if ($trainer_info): ?>
-		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?trainer_id=<?php echo $trainer_id; ?>" method="post">
+		<form action="<?php $_SERVER["PHP_SELF"] ?>?trainer_id=<?php echo $trainer_id; ?>" method="post">
 			<input type="hidden" name="trainer_id" value="<?php echo $trainer_id; ?>">
 
 			<div class="mb-3">
 				<label for="name" class="form-label">Name:</label>
-				<input type="text" id="name" name="name" class="form-control" value="<?php echo htmlspecialchars($trainer_info['person_name']); ?>" required>
+				<input type="text" id="name" name="name" class="form-control" value="<?php $trainer_info['person_name']; ?>" required>
 			</div>
 
 			<div class="mb-3">
 				<label for="contact" class="form-label">Contact:</label>
-				<input type="text" id="contact" name="contact" class="form-control" value="<?php echo htmlspecialchars($trainer_info['person_contact']); ?>" required>
+				<input type="text" id="contact" name="contact" class="form-control" value="<?php $trainer_info['person_contact']; ?>" required>
 			</div>
 
 			<div class="mb-3">
 				<label for="dob" class="form-label">Date of Birth:</label>
-				<input type="date" id="dob" name="dob" class="form-control" value="<?php echo htmlspecialchars($trainer_info['person_dob']); ?>" required>
+				<input type="date" id="dob" name="dob" class="form-control" value="<?php $trainer_info['person_dob']; ?>" required>
 			</div>
 
 			<div class="mb-3">
@@ -101,18 +146,84 @@ include 'navbar.php';
 
 			<div class="mb-3">
 				<label for="specialization" class="form-label">Specialization:</label>
-				<input type="text" id="specialization" name="specialization" class="form-control" value="<?php echo htmlspecialchars($trainer_info['trainer_specialization']); ?>" required>
+				<input type="text" id="specialization" name="specialization" class="form-control" value="<?php $trainer_info['trainer_specialization']; ?>" required>
 			</div>
 
 			<div class="mb-3">
 				<label for="cert" class="form-label">Certification Level:</label>
-				<input type="text" id="cert" name="cert" class="form-control" value="<?php echo htmlspecialchars($trainer_info['trainer_cert_lvl']); ?>" required>
+				<input type="text" id="cert" name="cert" class="form-control" value="<?php $trainer_info['trainer_cert_lvl']; ?>" required>
 			</div>
 
 			<div class="mb-3">
 				<button type="submit" name="submit" class="btn btn-primary">Save Changes</button>
 			</div>
 		</form>
+
+		<?php
+		// Fetch all programs for the dropdown
+		$all_programs_query = "SELECT program_id, program_name FROM Program ORDER BY program_name";
+		$all_programs_result = $conn->query($all_programs_query);
+
+		// Fetch trainer's program history
+		$history_query = file_get_contents('queries/trainer/select_trainer_program_history.sql');
+		$history_stmt = $conn->prepare($history_query);
+		$history_stmt->bind_param("i", $trainer_id);
+		$history_stmt->execute();
+		$history_result = $history_stmt->get_result();
+		?>
+
+		<h2 class="mt-5 mb-3">Program History</h2>
+
+		<form action="<?php $_SERVER["PHP_SELF"]; ?>?trainer_id=<?php echo $trainer_id; ?>" method="post" class="mb-4">
+			<div class="row g-3 align-items-end">
+				<div class="col-md-6">
+					<label for="program_id" class="form-label">Assign New Program:</label>
+					<select id="program_id" name="program_id" class="form-select" required>
+						<?php while ($program = $all_programs_result->fetch_assoc()): ?>
+							<option value="<?php echo $program['program_id']; ?>"><?php echo $program['program_name']; ?></option>
+						<?php endwhile; ?>
+					</select>
+				</div>
+				<div class="col-md-6">
+					<button type="submit" name="add_program_history" class="btn btn-primary">Assign Program</button>
+				</div>
+			</div>
+		</form>
+
+		<div class="table-responsive">
+			<table class="table table-striped table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>Program Name</th>
+						<th>Category</th>
+						<th>Start Date</th>
+						<th>End Date</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					while ($history_row = $history_result->fetch_assoc()):
+					?>
+						<tr>
+							<td><?php echo $history_row['program_name']; ?></td>
+							<td><?php echo $history_row['category_name']; ?></td>
+							<td><?php echo $history_row['start_date']; ?></td>
+							<td><?php echo $history_row['end_date'] ?? '-'; ?></td>
+							<td>
+								<?php if (is_null($history_row['end_date'])): ?>
+									<a href="view_trainer.php?trainer_id=<?php echo $trainer_id; ?>&history_id=<?php echo $history_row['history_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to end this program assignment for the trainer?')">End Assignment</a>
+								<?php endif; ?>
+							</td>
+						</tr>
+					<?php
+					endwhile;
+					$history_stmt->close();
+					?>
+				</tbody>
+			</table>
+		</div>
+
 
 		<?php else:
 		if (isset($_REQUEST['trainer_id'])):  ?>
