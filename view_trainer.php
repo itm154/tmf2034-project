@@ -123,17 +123,17 @@ include 'navbar.php';
 
 			<div class="mb-3">
 				<label for="name" class="form-label">Name:</label>
-				<input type="text" id="name" name="name" class="form-control" value="<?php $trainer_info['person_name']; ?>" required>
+				<input type="text" id="name" name="name" class="form-control" value="<?php echo $trainer_info['person_name']; ?>" required>
 			</div>
 
 			<div class="mb-3">
 				<label for="contact" class="form-label">Contact:</label>
-				<input type="text" id="contact" name="contact" class="form-control" value="<?php $trainer_info['person_contact']; ?>" required>
+				<input type="text" id="contact" name="contact" class="form-control" value="<?php echo $trainer_info['person_contact']; ?>" required>
 			</div>
 
 			<div class="mb-3">
 				<label for="dob" class="form-label">Date of Birth:</label>
-				<input type="date" id="dob" name="dob" class="form-control" value="<?php $trainer_info['person_dob']; ?>" required>
+				<input type="date" id="dob" name="dob" class="form-control" value="<?php echo $trainer_info['person_dob']; ?>" required>
 			</div>
 
 			<div class="mb-3">
@@ -146,12 +146,12 @@ include 'navbar.php';
 
 			<div class="mb-3">
 				<label for="specialization" class="form-label">Specialization:</label>
-				<input type="text" id="specialization" name="specialization" class="form-control" value="<?php $trainer_info['trainer_specialization']; ?>" required>
+				<input type="text" id="specialization" name="specialization" class="form-control" value="<?php echo $trainer_info['trainer_specialization']; ?>" required>
 			</div>
 
 			<div class="mb-3">
 				<label for="cert" class="form-label">Certification Level:</label>
-				<input type="text" id="cert" name="cert" class="form-control" value="<?php $trainer_info['trainer_cert_lvl']; ?>" required>
+				<input type="text" id="cert" name="cert" class="form-control" value="<?php echo $trainer_info['trainer_cert_lvl']; ?>" required>
 			</div>
 
 			<div class="mb-3">
