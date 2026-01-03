@@ -9,27 +9,16 @@ include 'navbar.php';
 	<h2 class="mb-3">Add Class</h2>
 	<form action="add_class.php" method="post">
 		<div class="mb-3">
-			<label for="trainer" class="form-label">Trainer:</label>
-			<select id="trainer" name="trainer_id" class="form-select" required>
+			<label for="history_id" class="form-label">Trainer & Program:</label>
+			<select id="history_id" name="history_id" class="form-select" required>
 				<?php
-				$trainers_query = file_get_contents('queries/trainer/select_all_trainers.sql');
-				$trainers_result = $conn->query($trainers_query);
-				while ($trainer = $trainers_result->fetch_assoc()):
+				$active_assignments_query = file_get_contents('queries/class/select_active_trainer_program_history.sql');
+				$active_assignments_result = $conn->query($active_assignments_query);
+				while ($assignment = $active_assignments_result->fetch_assoc()):
 				?>
-					<option value="<?php echo $trainer['person_id']; ?>"><?php echo $trainer['person_name']; ?></option>
-				<?php endwhile; ?>
-			</select>
-		</div>
-
-		<div class="mb-3">
-			<label for="program" class="form-label">Program:</label>
-			<select id="program" name="program_id" class="form-select" required>
-				<?php
-				$programs_query = "SELECT program_id, program_name FROM Program ORDER BY program_name";
-				$programs_result = $conn->query($programs_query);
-				while ($program = $programs_result->fetch_assoc()):
-				?>
-					<option value="<?php echo $program['program_id']; ?>"><?php echo $program['program_name']; ?></option>
+					<option value="<?php echo $assignment['history_id']; ?>">
+						<?php echo $assignment['person_name'] . ' - ' . $assignment['program_name']; ?>
+					</option>
 				<?php endwhile; ?>
 			</select>
 		</div>

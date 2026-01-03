@@ -8,7 +8,6 @@ FROM
   JOIN Program pr ON tph.program_id = pr.program_id
 WHERE
   tph.end_date IS NULL
-  OR tph.end_date >= CURDATE()
 ORDER BY
   p.person_name,
   pr.program_name
